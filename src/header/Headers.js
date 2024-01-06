@@ -16,7 +16,7 @@ export default function Header() {
               <span>
                   <ul>
                       <li><Link to="/Shop/Shop" style={{ fontSize: "1.8vw", fontWeight:"bold" }}>  쇼핑 </Link> </li>
-                      <li><Link to="/Shop/Shop" style={{ fontSize: "1.8vw", fontWeight:"bold" }}>  커뮤니티 </Link> </li>
+                      <li><Link to="/Community" style={{ fontSize: "1.8vw", fontWeight:"bold" }}>  커뮤니티 </Link> </li>
                       <li> <Link to="/Auth" style={{ fontSize: "1.8vw", fontWeight:"bold" }}> 로그인 | 회원가입 </Link> </li>
                   </ul>
               </span>
