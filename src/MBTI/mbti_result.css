@@ -1,0 +1,44 @@
+#mbti_result{
+    display: none;
+    width:100%;
+}
+
+.resultDesc{
+    font-size: 1rem;
+    font-weight: 800;
+    margin-top: 25%;
+    width:80%;
+    height: 20%;
+    background-color: rgba(192, 192, 192, 0.12);
+    border-radius: 17px;
+    padding-left: 5%;
+ 
+    text-align: start;
+
+    width:50%;
+}
+
+.resultFlavor{
+    font-size: 1rem;
+    font-weight: 800;
+    box-sizing: border-box;
+    width:40%;
+    background-color: rgba(192, 192, 192, 0.12);
+    border-radius: 17px;
+    
+    padding-right: 5%;
+    text-align: end;
+
+
+}
+
+.resultImage{
+    position: absolute;
+    bottom: 0%;
+}
+
+.mbtiBuy{
+    background-color: #EAD8AA;
+    
+    border:none;
+}

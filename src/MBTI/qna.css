@@ -1,0 +1,46 @@
+#mbti_qna{
+    display:none;
+}
+
+.answerBox{
+    width:80%;
+}
+.qBox{ /*질문 박스*/
+    text-align:center;
+    background-color:aliceblue;
+    border-radius: 20px;
+    font-size:30px;
+    width:100%
+}
+
+/*.answerList{ 버튼
+    background-color: wheat;
+    border-radius: 20px;
+    display: block;
+    width: 80%; /*폭을 바디기준 80%
+    border:0px;
+    font-size: 20px;
+    
+} 
+
+.answerList:hover, .answerList:focus{
+    background-color:azure;
+}*/
+
+.status{
+    height: 20px;
+    width: 100%;
+    border-radius: 20px;
+    background-color: bisque;
+}
+
+.statusBar{
+    height: 100%; /*status에 묶여있으므로 status 칸 기준 100%이다.*/
+    border-radius: 20px;
+    /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#f0b7a1+0,bf6e4e+100 */
+    background: #f0b7a1; /* Old browsers */
+    background: -moz-linear-gradient(top,  #f0b7a1 0%, #bf6e4e 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top,  #f0b7a1 0%,#bf6e4e 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom,  #f0b7a1 0%,#bf6e4e 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f0b7a1', endColorstr='#bf6e4e',GradientType=0 ); /* IE6-9 */
+}

@@ -1,0 +1,19 @@
+.myPageAccountBackground>table>tr{
+    display: grid;
+    grid-template-columns: 12fr 1fr;
+    padding-right: 5%;
+    margin:2%;
+}
+
+.myPageAccountMNprofileButton{
+    box-sizing: border-box;
+    width:5rem;
+    height: auto;
+    font-weight: 600;
+    font-size: 0.8rem;
+    background: rgba(28, 28, 28, 0.12);
+    border: 1px solid #F1F1F1;
+    border-radius: 17px;
+    line-height: 40px;
+}
+
