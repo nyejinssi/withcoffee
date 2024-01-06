@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import Home from "../Main";
 
 const SignUpDone = () => {
     const navigate = useNavigate();

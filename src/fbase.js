@@ -1,12 +1,20 @@
+import firebase from 'firebase/compat/app';
 import {initializeApp} from 'firebase/app';
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import {getFirestore} from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-    apiKey: process.env.REACT_APP_API_KEY,
-    authDomain: process.env.REACT_APP_AUTH_DOMAIN,
-    projectId: process.env.REACT_APP_PROJECT_ID,
-    storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
-    messagingSenderId: process.env.MESSAGING_SENDER_ID,
-    appId: process.env.APP_ID
+    apiKey: "AIzaSyAeKFb4VzVOfA1Zpj-pGJKJAixQWStOGzk",
+    authDomain: "withcoffee-89170.firebaseapp.com",
+    projectId: "withcoffee-89170",
+    storageBucket: "withcoffee-89170.appspot.com",
+    messagingSenderId: "503407818616",
+    appId: "1:503407818616:web:030ddff47929479770fa8d",
+    measurementId: "G-NV0KL1NPMT"
 };
 
 const app = initializeApp(firebaseConfig);
+export const authService = getAuth();
+export const dbService = getFirestore();
+export const storageService = getStorage();
