@@ -1,4 +1,5 @@
-import React from 'react';
+
+import React , {useEffect} from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Main from './main/Main';
 import Headers from './header/Headers';
@@ -7,7 +8,7 @@ import UserInfo from './Auth/UserInfo';
 import WritePost from './community/WritePost';
 import CommunityHome from './community/CommunityHome';
 import Post from './community/Post';
-import PostDetails from './community/PostDetails';
+import PostDetail from './community/PostDetail';
 
 const App = () => {
   return (
@@ -21,7 +22,7 @@ const App = () => {
           <Route path="/community/Post" element={<Post/>} /> 
           <Route path="/community/write" element={<WritePost/>} /> 
           <Route path="/community/*" element={<CommunityHome/>} />
-          <Route path="/community/:category/:postId" element={<PostDetails />} />
+          <Route path="/community/:category/:postId" element={<PostDetail />} />
         </Routes>
       </Router>
     </div>

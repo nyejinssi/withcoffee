@@ -13,7 +13,7 @@ const Sign = () => {
         let provider;
         if (name === "google"){ 
             provider = new GoogleAuthProvider(); 
-        }
+        } 
         try {
             const { user } = await signInWithPopup(authService, provider);
             console.log("구글로 회원가입 하기를 선택하셨습니다.");
@@ -42,6 +42,7 @@ const Sign = () => {
                 </div>
                 <div>
                         <img className='G-SingIn' src={GoogleLogin} onClick={onSocialClick} name="google" alt="구글로 로그인" />
+
                 </div>
             </>
              );
