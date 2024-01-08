@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { authService, dbService } from '../fbase';
-import { doc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
+import { doc,  getDoc, getDocs,  updateDoc,  arrayUnion,  collection,  addDoc,
+  query,  orderBy,  onSnapshot, where} from 'firebase/firestore';
 
 const PostDetail = () => {
   const { category, postId } = useParams();
@@ -11,25 +12,23 @@ const PostDetail = () => {
   });
   const [userLiked, setUserLiked] = useState(false);
   const [userScrapped, setUserScrapped] = useState(false);
+  const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState('');
+  const [writerNickname, setWriterNickname] = useState('');
   const user = authService.currentUser;
   const createrId = user?.uid; // Add a conditional check
+  const commentInputRef = useRef(null);
 
   useEffect(() => {
     const fetchPost = async () => {
       try {
         const postDocRef = doc(dbService, 'posts', postId);
         const postDocSnapshot = await getDoc(postDocRef);
-  
+    
         if (postDocSnapshot.exists()) {
-          const postData = postDocSnapshot.data();
-          console.log('Post Data:', postData); // Add this line to check the structure
-  
+          const postData = postDocSnapshot.data();  
           setPost({ id: postDocSnapshot.id, ...postData });
-  
-          // Check if the current user has liked the post
           setUserLiked(postData.likes?.includes(createrId));
-  
-          // Check if the current user has scrapped the post
           setUserScrapped(postData.scraps?.includes(createrId));
         } else {
           console.error('Post not found with ID:', postId);
@@ -37,10 +36,91 @@ const PostDetail = () => {
       } catch (error) {
         console.error('Error fetching post:', error);
       }
+    };    
+
+    const fetchComments = async () => {
+      try {
+        const commentsCollection = collection(dbService, 'comments');
+        const postCommentsQuery = query(
+          commentsCollection,
+          where('postid', '==', postId),
+          orderBy('time')
+        );
+    
+        const querySnapshot = await getDocs(postCommentsQuery);
+    
+        const fetchedComments = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+    
+        setComments(fetchedComments);
+      } catch (error) {
+        console.error('Error fetching comments:', error);
+      }
     };
-  
+
+    const fetchUserData = async () => {
+      if (user) {
+        try {
+          // Create a query to get the user document with the matching createrId
+          const userQuery = query(collection(dbService, 'User'), where('createrId', '==', user.uid));
+          // Execute the query and get the documents
+          const querySnapshot = await getDocs(userQuery);
+    
+          // Check if there is at least one document matching the query
+          if (!querySnapshot.empty) {
+            // Get the first document from the query result
+            const userDoc = querySnapshot.docs[0];
+    
+            // Access the 'nickname' field from the document data
+            const nickname = userDoc.data().nickname;
+    
+            // Set the nickname in the state
+            setWriterNickname(nickname);
+          } else {
+            console.error("User document not found for createrId:", user.uid);
+          }
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        }
+      }
+    };
+    
     fetchPost();
-  }, [postId, createrId]);
+    fetchComments();
+    fetchUserData();
+  }, [postId, createrId, user]);
+
+  const handleCommentSubmit = async (e) => {
+    e.preventDefault();
+  
+    if (newComment.trim() === '') {
+      return;
+    }
+  
+    try {
+      const commentData = {
+        postid: postId,
+        createrId: createrId,
+        text: newComment,
+        time: Date.now(),
+        Writer: writerNickname,
+      };
+  
+      const commentDocRef = await addDoc(collection(dbService, 'comments'), commentData);
+  
+      setComments((prevComments) => [
+        ...prevComments,
+        { id: commentDocRef.id, ...commentData },
+      ]);
+  
+      setNewComment('');
+      commentInputRef.current.value = ''; // Clear the input field
+    } catch (error) {
+      console.error('Error adding comment:', error);
+    }
+  };
   
 
   const handleLikeClick = async () => {
@@ -85,6 +165,7 @@ const PostDetail = () => {
     }
   };
 
+
   return (
     <div>
       {post ? (
@@ -99,6 +180,24 @@ const PostDetail = () => {
           <button onClick={handleScrapClick}> 저장 </button>
           <p> {post.scrap}</p>
           <p> Comment: {post.commentid ? post.commentid.length : 0}</p>
+          <ul>
+            {comments.map((comment) => (
+              <li key={comment.id}>
+                <p>{comment.text}</p>
+                <p>Time: {new Date(comment.time).toLocaleString()}</p>
+                <p>{comment.Writer} </p>
+              </li>
+            ))}
+          </ul>
+          <form onSubmit={handleCommentSubmit}>
+            <textarea
+              ref={commentInputRef}
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              placeholder="Add a comment..."
+            />
+            <button type="submit">Submit</button>
+          </form>
         </div>
       ) : (
         <p>Loading...</p>

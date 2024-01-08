@@ -33,10 +33,10 @@ const PopularPosts = () => {
             <Link to={`/community/popular/${post.id}`}>
               <h3>{post.PostTitle}</h3>
             </Link>
-            <p>Like: {post.like}</p>
-            <p>Comment: {post.commentid.length}</p>
-            <p>Time: {new Date(post.time).toLocaleString()}</p>
-            <p>Writer: {post.Writer}</p>
+            <p> 좋아요 : {post.like}</p>
+            <p> 댓글 수: {post.commentid.length}</p>
+            <p> 시간 : {new Date(post.time).toLocaleString()}</p>
+            <p> 작가: {post.Writer}</p>
           </li>
         ))}
       </ul>

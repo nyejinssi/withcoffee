@@ -38,7 +38,7 @@ const Posts = ({ category, setCategory }) => {
             <Link to={`/community/${category}/${post.id}`}>
               <h3>{post.PostTitle}</h3>
             </Link>
-            <p>Time: {new Date(post.time).toLocaleString()}</p>
+            <p> 시간 : {new Date(post.time).toLocaleString()}</p>
             <p> 글쓴이 : {post.Writer}</p>
             <p> 좋아요 : {post.like}</p>
             <p> 댓글 : {post.commentid.length}</p>
