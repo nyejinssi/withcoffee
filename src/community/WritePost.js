@@ -85,7 +85,7 @@ const WritePost = () => {
       PostImg: postImgURL,
       like: 0,
       scrap: 0,
-      time: serverTimestamp(),
+      time: Date.now(),
       commentid: [], // Initialize with an empty array
     });
   

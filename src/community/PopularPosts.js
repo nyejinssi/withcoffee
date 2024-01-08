@@ -35,7 +35,7 @@ const PopularPosts = () => {
             </Link>
             <p>Like: {post.like}</p>
             <p>Comment: {post.commentid.length}</p>
-            <p>Time: {post.time.toDate().toLocaleString()}</p>
+            <p>Time: {new Date(post.time).toLocaleString()}</p>
             <p>Writer: {post.Writer}</p>
           </li>
         ))}
