@@ -1,9 +1,10 @@
 import React, { useState , useEffect } from 'react';
 import { authService, dbService, storageService} from '../fbase';
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { addDoc, getDocs, doc, collection, query, onSnapshot, orderBy, serverTimestamp , where} from "firebase/firestore";
+import { addDoc, setDoc, getDocs, doc, collection, query, onSnapshot, orderBy, serverTimestamp , where} from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useNavigate, Link } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 
 const WritePost = () => {
   const [category, setCategory] = useState('freedom');
@@ -69,9 +70,13 @@ const WritePost = () => {
     setLoading(true);
     // Get the current user
     const uid = user.uid;
+    const postId = uuidv4(); // Generate a unique ID for the post
+  
     const postImgURL = await handleFileUpload();
-    // Create a new post document
-    const postRef = await addDoc(collection(dbService, 'posts'), {
+    // Create a new post document with the explicitly set document ID
+    const postRef = doc(dbService, 'posts', postId);
+  
+    await setDoc(postRef, {
       Class: category,
       createrId: uid,
       Writer: writerNickname,
@@ -83,15 +88,15 @@ const WritePost = () => {
       time: serverTimestamp(),
       commentid: [], // Initialize with an empty array
     });
-
-    console.log('Post created successfully with ID: ', postRef.id);
-
+  
+    console.log('Post created successfully with ID: ', postId);
+  
     // Reset form fields after submission
     setCategory('');
     setTitle('');
     setMainText('');
     setMainImage(null);
-
+  
     // Redirect or perform any other action after successful submission
     navigate('/'); // Adjust the path as needed
     setLoading(false);

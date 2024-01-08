@@ -9,6 +9,7 @@ import WritePost from './community/WritePost';
 import CommunityHome from './community/CommunityHome';
 import Post from './community/Post';
 import PostDetail from './community/PostDetail';
+import PopularPosts from './community/PopularPosts';
 
 const App = () => {
   return (

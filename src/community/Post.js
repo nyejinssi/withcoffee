@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { dbService } from '../fbase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 
@@ -33,25 +33,18 @@ const Posts = ({ category, setCategory }) => {
   return (
     <div>
       <ul>
-      {posts.map((post) => (
+        {posts.map((post) => (
           <li key={post.id}>
             <Link to={`/community/${category}/${post.id}`}>
               <h3>{post.PostTitle}</h3>
             </Link>
-            <p>Like: {post.like}</p>
-            <p>Comment: {post.commentid.length}</p>
-            <p>Time: {post.time.toDate().toLocaleString()}</p>
-            <p>Writer: {post.Writer}</p>
+            <p> 시간 : {post.time.toDate().toLocaleString()}</p>
+            <p> 글쓴이 : {post.Writer}</p>
+            <p> 좋아요 : {post.like}</p>
+            <p> 댓글 : {post.commentid.length}</p>
           </li>
         ))}
       </ul>
-
-      {/* Add a link to show all posts */}
-      {category && (
-        <Link to="/community" onClick={() => setCategory('')}>
-          Show All Posts
-        </Link>
-      )}
     </div>
   );
 };

@@ -1,14 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import WritePost from './WritePost';
+import PopularPosts from './PopularPosts';
 import Post from './Post'; // Import the Posts component
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link , useLocation } from 'react-router-dom';
 
 const CommunityHome = () => {
   const navigate = useNavigate();
-  const [category, setCategory] = useState('');
+  const location = useLocation();
+  const [category, setCategory] = useState('popular');
+
+  useEffect(() => {
+    // Extract category from the current URL
+    const categoryFromURL = location.pathname.split('/').pop();
+    setCategory(categoryFromURL || 'popular'); // Default to 'popular' if not present
+  }, [location.pathname]);
 
   const handleCategoryClick = (clickedCategory) => {
     setCategory(clickedCategory);
+    navigate(`/community/${clickedCategory}`);
   };
 
   const handleWritePostClick = () => {
@@ -20,7 +29,6 @@ const CommunityHome = () => {
     <div>
       <nav>
         <ul>
-        <li><Link to="/community" >전체</Link></li>
           <li><Link to="/community/popular" >인기</Link></li>
           <li><Link to="/community/freedom" onClick={() => handleCategoryClick('freedom')} >자유</Link></li>
           <li><Link to="/community/coffeeBean" onClick={() => handleCategoryClick('coffeBean')}>원두</Link></li>
@@ -30,11 +38,15 @@ const CommunityHome = () => {
         </ul>
       </nav>
 
-      {/* Use the Posts component with the selected category */}
-      <Post category={category} />
+      {category === 'popular' ? (
+        <PopularPosts />
+      ) : (
+        <Post category={category} />
+      )}
       <button onClick={handleWritePostClick}>글쓰기</button>
     </div>
   );
 };
 
 export default CommunityHome;
+
