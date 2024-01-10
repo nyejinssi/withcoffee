@@ -63,20 +63,11 @@ const PostDetail = () => {
     const fetchUserData = async () => {
       if (user) {
         try {
-          // Create a query to get the user document with the matching createrId
           const userQuery = query(collection(dbService, 'User'), where('createrId', '==', user.uid));
-          // Execute the query and get the documents
           const querySnapshot = await getDocs(userQuery);
-    
-          // Check if there is at least one document matching the query
           if (!querySnapshot.empty) {
-            // Get the first document from the query result
             const userDoc = querySnapshot.docs[0];
-    
-            // Access the 'nickname' field from the document data
             const nickname = userDoc.data().nickname;
-    
-            // Set the nickname in the state
             setWriterNickname(nickname);
           } else {
             console.error("User document not found for createrId:", user.uid);
@@ -102,6 +93,7 @@ const PostDetail = () => {
     try {
       const commentData = {
         postid: postId,
+        postClass: post.Class,
         createrId: createrId,
         text: newComment,
         time: Date.now(),
@@ -110,10 +102,22 @@ const PostDetail = () => {
   
       const commentDocRef = await addDoc(collection(dbService, 'comments'), commentData);
   
+      // Update the posts collection's commentid array
+      const postDocRef = doc(dbService, 'posts', postId);
+      await updateDoc(postDocRef, {
+        commentid: arrayUnion(commentDocRef.id),
+      });
+  
       setComments((prevComments) => [
         ...prevComments,
         { id: commentDocRef.id, ...commentData },
       ]);
+  
+      // Increment the comment count in the UI
+      setPost((prevPost) => ({
+        ...prevPost,
+        commentid: [...prevPost.commentid, commentDocRef.id],
+      }));
   
       setNewComment('');
       commentInputRef.current.value = ''; // Clear the input field
@@ -174,12 +178,12 @@ const PostDetail = () => {
           <p> 시간 : {new Date(post.time).toLocaleString()}</p>
           <p> 작성자 : {post.Writer}</p>
           <p> {post.PostText}</p>
-          <img src={post.PostImg} alt="postimg"/> 
-          <button onClick={handleLikeClick}> 좋아요 </button>
+          {post.PostImg && <img src={post.PostImg} alt="postimg" />}
           <p> {post.like}</p>
-          <button onClick={handleScrapClick}> 저장 </button>
+          <button onClick={handleLikeClick}> 좋아요 </button>
           <p> {post.scrap}</p>
-          <p> Comment: {post.commentid ? post.commentid.length : 0}</p>
+          <button onClick={handleScrapClick}> 저장 </button>
+          <p> 댓글 수: {post.commentid ? post.commentid.length : 0}</p>
           <ul>
             {comments.map((comment) => (
               <li key={comment.id}>
@@ -194,9 +198,9 @@ const PostDetail = () => {
               ref={commentInputRef}
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
-              placeholder="Add a comment..."
+              placeholder="댓글을 적어주세요!"
             />
-            <button type="submit">Submit</button>
+            <button type="submit">저장</button>
           </form>
         </div>
       ) : (

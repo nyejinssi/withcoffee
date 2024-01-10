@@ -1,6 +1,6 @@
 import firebase from 'firebase/compat/app';
 import {initializeApp} from 'firebase/app';
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithPopup, RecaptchaVerifier } from "firebase/auth";
 import {getFirestore} from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
@@ -18,3 +18,4 @@ const app = initializeApp(firebaseConfig);
 export const authService = getAuth();
 export const dbService = getFirestore();
 export const storageService = getStorage();
+authService.languageCode = 'ko';

@@ -1,31 +1,73 @@
 
-import React , {useEffect} from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import React , {useEffect, useState } from 'react';
+import { BrowserRouter as Router, Route, Routes, BrowserRouter } from 'react-router-dom';
+import { authService } from './fbase';
+
 import Main from './main/Main';
 import Headers from './header/Headers';
+import UserHeader from './header/UserHeader';
+//--------------------------Sign------------------------------
 import Sign from './Auth/Sign';
 import UserInfo from './Auth/UserInfo';
+//-----------------------community--------------------------
 import WritePost from './community/WritePost';
 import CommunityHome from './community/CommunityHome';
 import Post from './community/Post';
 import PostDetail from './community/PostDetail';
 import PopularPosts from './community/PopularPosts';
 
+//-------------MyPage-------------
+import Home from './MyPage/Home';
+import MyComment from './MyPage/MyComment';
+import MyPost from './MyPage/MyPost';
+import SavedPost from './MyPage/SavedPost';
+
+
 const App = () => {
+  const [init, setInit] = useState(false); // init = false
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userObj, setUserObj] = useState(null); 
+  useEffect(() => {
+    authService.onAuthStateChanged((user) => {
+      if(user){
+        setIsLoggedIn(true);
+        setUserObj(user);
+      } else {
+        setIsLoggedIn(false);
+      }
+      setInit(true);
+    });
+  }, []);
   return (
     <div className="App">
-      <Router basename={process.env.PUBLIC_URL}>
-        <Headers/>
+      <BrowserRouter basename={process.env.PUBLIC_URL}>
+        {isLoggedIn ? (
+            <UserHeader/>
+          ):(
+          <Headers />
+        )}
         <Routes>
+          {isLoggedIn ? (
+            <>
+              <Route path="/Auth/UserInfo" element={<UserInfo/>} />
+              <Route path="/community/Post" element={<Post/>} /> 
+              <Route path="/community/write" element={<WritePost/>} /> 
+              <Route path="/community/*" element={<CommunityHome/>} />
+              <Route path="/community/:category/:postId" element={<PostDetail />} />
+
+              <Route path="/MyPage/*" element={<Home/>} />
+              <Route path="/MyPage/MyComment/*" element={<MyComment/>} />
+              <Route path="/MyPage/MyPost/*" element={<MyPost/>} />
+              <Route path="/MyPage/SavedPost/*" element={<SavedPost/>} />
+            </>
+          ):(
+            <>
+              <Route path="/Auth" element={<Sign/>} />
+            </>
+          )}
           <Route path="/" element={<Main />} />
-          <Route path="/Auth" element={<Sign/>} />
-          <Route path="/Auth/UserInfo" element={<UserInfo/>} />
-          <Route path="/community/Post" element={<Post/>} /> 
-          <Route path="/community/write" element={<WritePost/>} /> 
-          <Route path="/community/*" element={<CommunityHome/>} />
-          <Route path="/community/:category/:postId" element={<PostDetail />} />
         </Routes>
-      </Router>
+      </BrowserRouter>
     </div>
   );
 };
