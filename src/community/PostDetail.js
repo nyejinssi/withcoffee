@@ -183,6 +183,29 @@ const PostDetail = () => {
     navigate(`/Edit/${postId}`);
   };
 
+  const handleDeleteComment = async (commentId) => {
+    try {
+      const commentDocRef = doc(dbService, 'comments', commentId);
+      await deleteDoc(commentDocRef);
+
+      // Update the posts collection's commentid array after deleting the comment
+      const postDocRef = doc(dbService, 'posts', postId);
+      await updateDoc(postDocRef, {
+        commentid: post.commentid.filter((id) => id !== commentId),
+      });
+
+      setComments((prevComments) => prevComments.filter((comment) => comment.id !== commentId));
+
+      // Decrement the comment count in the UI
+      setPost((prevPost) => ({
+        ...prevPost,
+        commentid: prevPost.commentid.filter((id) => id !== commentId),
+      }));
+    } catch (error) {
+      console.error('Error deleting comment:', error);
+    }
+  };
+
 
   return (
     <div>
@@ -198,8 +221,14 @@ const PostDetail = () => {
           <p> 시간 : {new Date(post.time).toLocaleString()}</p>
           <p> 작성자 : {post.Writer}</p>
           <p> {post.PostText}</p>
-          {console.log('post.Writer:', post.Writer, 'createrId:', createrId)}
-          {post.PostImg && <img src={post.PostImg} alt="postimg" />}
+          {post.PostImgs && post.PostImgs.length > 0 && (
+  <div>
+    {post.PostImgs.map((imageUrl, index) => (
+      <img key={index} src={imageUrl} alt={`postimg-${index}`} />
+    ))}
+  </div>
+)}
+
           <p> {post.like}</p>
           <button onClick={handleLikeClick}> 좋아요 </button>
           <p> {post.scrap}</p>
@@ -210,7 +239,9 @@ const PostDetail = () => {
               <li key={comment.id}>
                 <p>{comment.text}</p>
                 <p>Time: {new Date(comment.time).toLocaleString()}</p>
-                <p>{comment.Writer} </p>
+                {comment.createrId === createrId && (
+                  <button onClick={() => handleDeleteComment(comment.id)}>삭제</button>
+                )}
               </li>
             ))}
           </ul>

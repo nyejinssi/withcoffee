@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { authService, dbService, storageService } from '../fbase'; // Import storageService
+import { authService, dbService, storageService } from '../fbase';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { ref, deleteObject, uploadBytes, getDownloadURL } from 'firebase/storage';
 
@@ -8,12 +8,20 @@ const Edit = () => {
   const navigate = useNavigate();
   const { postId } = useParams();
   const [post, setPost] = useState({
-    PostTitle: '',
+    Class: '',
+    PostImgs: [],
     PostText: '',
-    // Add other post properties
+    PostTitle: '',
+    Writer: '',
+    commentid: [],
+    createrId: '',
+    like: 0,
+    scrap: 0,
+    time: 0,
   });
-  const [image, setImage] = useState(null);
-  const [imageUrl, setImageUrl] = useState(null);
+  const [images, setImages] = useState([]);
+  const [newImages, setNewImages] = useState([]);
+  const [deletedImages, setDeletedImages] = useState([]);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -24,7 +32,7 @@ const Edit = () => {
         if (postDocSnapshot.exists()) {
           const postData = postDocSnapshot.data();
           setPost({ ...postData });
-          setImageUrl(postData.PostImg); // Assuming the image URL is stored in PostImg
+          setImages(postData.PostImgs);
         } else {
           console.error('Post not found with ID:', postId);
         }
@@ -42,26 +50,30 @@ const Edit = () => {
     try {
       const postDocRef = doc(dbService, 'posts', postId);
 
-      if (image) {
-        // If a new image is selected, upload it to storage
-        const imageRef = ref(storageService, `images/${postId}`);
+      // Upload new images
+      const uploadImagePromises = newImages.map(async (image) => {
+        const imageRef = ref(storageService, `postImages/${post.createrId}/${image.name}`);
         await uploadBytes(imageRef, image);
-        const imageUrl = await getDownloadURL(imageRef);
+        return getDownloadURL(imageRef);
+      });
 
-        await updateDoc(postDocRef, {
-          PostTitle: post.PostTitle,
-          PostText: post.PostText,
-          PostImg: imageUrl,
-          // Add other updated post properties
-        });
-      } else {
-        // If no new image is selected, update other post properties
-        await updateDoc(postDocRef, {
-          PostTitle: post.PostTitle,
-          PostText: post.PostText,
-          // Add other updated post properties
-        });
-      }
+      const newImageUrls = await Promise.all(uploadImagePromises);
+
+      // Update post data
+      await updateDoc(postDocRef, {
+        PostText: post.PostText,
+        PostTitle: post.PostTitle,
+        PostImgs: [...images, ...newImageUrls],
+        // Add other updated post properties
+      });
+
+      // Delete images marked for deletion
+      const deleteImagePromises = deletedImages.map(async (imageUrl) => {
+        const imageRef = ref(storageService, imageUrl);
+        await deleteObject(imageRef);
+      });
+
+      await Promise.all(deleteImagePromises);
 
       alert('게시글이 수정되었습니다!');
       navigate(`/post/${postId}`);
@@ -70,18 +82,22 @@ const Edit = () => {
     }
   };
 
+  const handleImageChange = (e) => {
+    const selectedImages = Array.from(e.target.files);
+    setNewImages(selectedImages);
+  };
+
+  const handleDeleteImage = (imageUrl) => {
+    setImages((prevImages) => prevImages.filter((img) => img !== imageUrl));
+    setDeletedImages((prevDeletedImages) => [...prevDeletedImages, imageUrl]);
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setPost((prevPost) => ({
       ...prevPost,
       [name]: value,
     }));
-  };
-
-  const handleImageChange = (e) => {
-    const selectedImage = e.target.files[0];
-    setImage(selectedImage);
-    setImageUrl(URL.createObjectURL(selectedImage));
   };
 
   return (
@@ -106,14 +122,21 @@ const Edit = () => {
             onChange={handleInputChange}
           />
         </label>
+        {/* Other input fields */}
         <br />
-        {imageUrl && <img src={imageUrl} alt="postimg" />}
+        {images.map((imageUrl, index) => (
+          <div key={index}>
+            <img src={imageUrl} alt={`postimg-${index}`} />
+            <button type="button" onClick={() => handleDeleteImage(imageUrl)}>
+              Delete Image
+            </button>
+          </div>
+        ))}
         <br />
         <label>
-          Image:
-          <input type="file" accept="image/*" onChange={handleImageChange} />
+          Add Images:
+          <input type="file" accept="image/*" onChange={handleImageChange} multiple />
         </label>
-        {/* Add other input fields for additional post properties */}
         <br />
         <button type="submit">Save Changes</button>
       </form>
