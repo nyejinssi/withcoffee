@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link  } from 'react-router-dom';
 import { authService, dbService } from '../fbase';
 import Post from '../community/Post';
+
 import { collection, query, where, getDocs } from 'firebase/firestore';
 const SavedPost = () => {
   const user = authService.currentUser;
@@ -35,16 +36,22 @@ const SavedPost = () => {
 
   return (
     <div>
-        <h3>내가 저장한 글</h3>
+      <nav>
         <ul>
-          {mySavedPosts.map((post) => (
-            <li key={post.id}>
-              <p>{post.Class}</p>
-              <Link to={`/community/${post.Class}/${post.id}`}>{post.PostTitle}</Link>
-              <p>좋아요 수: {post.like}</p>
-              <p>댓글 수: {post.commentid ? post.commentid.length : 0}</p>
-            </li>
-          ))}
+          <li><Link to="/mypage">내가 쓴 글</Link></li>
+          <li><Link to="/mypage/MyComment">댓글단 글</Link></li>
+          <li><Link to="/mypage/SavedPost">저장한 글</Link></li>
+          <li><Link to="/mypage/UpdateInfo">내 정보 수정</Link></li>
+        </ul>
+      </nav>
+      <ul>
+        {mySavedPosts.map((post) => (
+          <li key={post.id}>
+            <Link to={`/community/${post.Class}/${post.id}`}>{post.PostTitle}</Link>
+            <p>좋아요 수: {post.like}</p>
+            <p>댓글 수: {post.commentid ? post.commentid.length : 0}</p>
+          </li>
+        ))}
         </ul>
       </div>
   );

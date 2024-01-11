@@ -15,7 +15,6 @@ const WritePost = () => {
   const [loading, setLoading] = useState(false);
   const user = authService.currentUser;
   const navigate = useNavigate();
-  
 
   const handleFileUpload = async () => {
     if (mainImage) {

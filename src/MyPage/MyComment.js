@@ -1,12 +1,12 @@
-// Import necessary dependencies
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
 import { authService, dbService } from '../fbase';
-import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
+import { collection, query, where, getDocs, orderBy, getDoc, doc } from 'firebase/firestore';
+
 const MyComment = () => {
   const user = authService.currentUser;
   const [myComments, setMyComments] = useState([]);
+  const [myPosts, setMyPosts] = useState([]);
 
   useEffect(() => {
     const fetchMyComments = async () => {
@@ -19,10 +19,21 @@ const MyComment = () => {
 
         const querySnapshot = await getDocs(commentsQuery);
 
-        const commentsData = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
+        const commentsData = await Promise.all(
+          querySnapshot.docs.map(async (commentDoc) => {
+            const commentData = {
+              id: commentDoc.id,
+              ...commentDoc.data(),
+            };
+
+            // Fetch the post corresponding to the comment
+            const postDoc = await getDoc(doc(dbService, 'posts', commentData.postid));
+            const postData = postDoc.data();
+            commentData.postTitle = postData?.PostTitle || 'No Title';
+
+            return commentData;
+          })
+        );
 
         setMyComments(commentsData);
       } catch (error) {
@@ -35,18 +46,28 @@ const MyComment = () => {
 
   return (
     <div>
-        <h3>내가 작성한 댓글</h3>
+      <nav>
+        <ul>
+          <li><Link to="/mypage">내가 쓴 글</Link></li>
+          <li><Link to="/mypage/MyComment">댓글단 글</Link></li>
+          <li><Link to="/mypage/SavedPost">저장한 글</Link></li>
+          <li><Link to="/mypage/UpdateInfo">내 정보 수정</Link></li>
+        </ul>
+      </nav>
+      <div>
         <ul>
           {myComments.map((comment) => (
             <li key={comment.id}>
               <Link to={`/community/${comment.postClass}/${comment.postid}`}>
-                {comment.PostTitle}
-                {comment.text.substring(0, 50)}...
+              <p>{comment.postTitle}</p>
+              <p>{comment.text.substring(0, 50)}...</p>
               </Link>
+              
             </li>
           ))}
         </ul>
       </div>
+    </div>
   );
 };
 

@@ -34,18 +34,18 @@ const Home = () => {
 
   return (
     <div>
-      <h2>마이페이지</h2>
-
       <nav>
         <ul>
           <li><Link to="/mypage">내가 쓴 글</Link></li>
           <li><Link to="/mypage/MyComment">댓글단 글</Link></li>
           <li><Link to="/mypage/SavedPost">저장한 글</Link></li>
+          <li><Link to="/mypage/UpdateInfo">내 정보 수정</Link></li>
+          <li>내가 쓴 리뷰</li>
+          <li>관심상품</li>
         </ul>
       </nav>
 
       <div>
-        <h3>내가 쓴 글</h3>
         <ul>
           {myPosts.map((post) => (
             <li key={post.id}>

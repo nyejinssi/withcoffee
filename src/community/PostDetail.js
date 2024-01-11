@@ -1,10 +1,11 @@
 import React, { useState, useEffect,useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { authService, dbService } from '../fbase';
 import { doc,  getDoc, getDocs,  updateDoc,  arrayUnion,  collection,  addDoc,
-  query,  orderBy,  onSnapshot, where} from 'firebase/firestore';
+  query,  orderBy,  onSnapshot, where, deleteDoc} from 'firebase/firestore';
 
 const PostDetail = () => {
+  const navigate = useNavigate();
   const { category, postId } = useParams();
   const [post, setPost] = useState({
     scraps: [],
@@ -76,8 +77,7 @@ const PostDetail = () => {
           console.error("Error fetching user data:", error);
         }
       }
-    };
-    
+    };    
     fetchPost();
     fetchComments();
     fetchUserData();
@@ -126,7 +126,17 @@ const PostDetail = () => {
     }
   };
   
-
+  const handleDelete = async () => {
+    try {
+      // Add logic to check if the user is the post creator and has the permission to delete
+      const postDocRef = doc(dbService, 'posts', postId);
+      await deleteDoc(postDocRef);
+      alert('게시글이 삭제되었습니다!');
+      navigate('/community/popular'); // Navigate to the desired route
+    } catch (error) {
+      console.error('Error deleting post:', error);
+    }
+  };
   const handleLikeClick = async () => {
     try {
       if (!userLiked) {
@@ -168,6 +178,10 @@ const PostDetail = () => {
       console.error('Error updating scrap count:', error);
     }
   };
+  const handleEditClick = () => {
+    // Assuming you've set up a route for the edit page with a path like '/edit/:postId'
+    navigate(`/Edit/${postId}`);
+  };
 
 
   return (
@@ -175,9 +189,16 @@ const PostDetail = () => {
       {post ? (
         <div>
           <h2>{post.PostTitle}</h2>
+          {post.createrId === createrId && (
+            <button onClick={handleDelete}>삭제</button>
+            )}
+            {post.createrId === createrId && (
+            <button onClick={handleEditClick}>수정</button>
+          )}
           <p> 시간 : {new Date(post.time).toLocaleString()}</p>
           <p> 작성자 : {post.Writer}</p>
           <p> {post.PostText}</p>
+          {console.log('post.Writer:', post.Writer, 'createrId:', createrId)}
           {post.PostImg && <img src={post.PostImg} alt="postimg" />}
           <p> {post.like}</p>
           <button onClick={handleLikeClick}> 좋아요 </button>

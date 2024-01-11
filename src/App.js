@@ -15,13 +15,12 @@ import CommunityHome from './community/CommunityHome';
 import Post from './community/Post';
 import PostDetail from './community/PostDetail';
 import PopularPosts from './community/PopularPosts';
-
+import Edit from './community/Edit';
 //-------------MyPage-------------
 import Home from './MyPage/Home';
 import MyComment from './MyPage/MyComment';
-import MyPost from './MyPage/MyPost';
 import SavedPost from './MyPage/SavedPost';
-
+import UpdateInfo from './MyPage/UpdateInfo';
 
 const App = () => {
   const [init, setInit] = useState(false); // init = false
@@ -54,11 +53,11 @@ const App = () => {
               <Route path="/community/write" element={<WritePost/>} /> 
               <Route path="/community/*" element={<CommunityHome/>} />
               <Route path="/community/:category/:postId" element={<PostDetail />} />
-
-              <Route path="/MyPage/*" element={<Home/>} />
-              <Route path="/MyPage/MyComment/*" element={<MyComment/>} />
-              <Route path="/MyPage/MyPost/*" element={<MyPost/>} />
-              <Route path="/MyPage/SavedPost/*" element={<SavedPost/>} />
+              <Route path="/mypage/*" element={<Home/>} />
+              <Route path="/mypage/MyComment/*" element={<MyComment/>} />
+              <Route path="/mypage/SavedPost/*" element={<SavedPost/>} />
+              <Route path="/mypage/UpdateInfo/*" element={<UpdateInfo/>} />
+              <Route path="/Edit/:postId" element={<Edit />} />
             </>
           ):(
             <>
