@@ -5,7 +5,7 @@ import {React, useState} from 'react';
 export default function Header() {
       return(
       <div>
-            <img src={logo} alt="로고" />
+        <Link to="/"><img src={logo} alt="로고" /></Link>
               <form>
                     <input
                     type="text"

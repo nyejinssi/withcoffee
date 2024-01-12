@@ -1,4 +1,3 @@
-
 import React , {useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, BrowserRouter } from 'react-router-dom';
 import { authService } from './fbase';
@@ -21,6 +20,9 @@ import Home from './MyPage/Home';
 import MyComment from './MyPage/MyComment';
 import SavedPost from './MyPage/SavedPost';
 import UpdateInfo from './MyPage/UpdateInfo';
+//------- MBTI------------------------
+import MBTItest from './MBTI/MBTItest';
+import MBTIdata from './MBTI/MBTIdata';
 
 const App = () => {
   const [init, setInit] = useState(false); // init = false
@@ -49,10 +51,12 @@ const App = () => {
           {isLoggedIn ? (
             <>
               <Route path="/Auth/UserInfo" element={<UserInfo/>} />
+              
               <Route path="/community/Post" element={<Post/>} /> 
               <Route path="/community/write" element={<WritePost/>} /> 
               <Route path="/community/*" element={<CommunityHome/>} />
               <Route path="/community/:category/:postId" element={<PostDetail />} />
+              
               <Route path="/mypage/*" element={<Home/>} />
               <Route path="/mypage/MyComment/*" element={<MyComment/>} />
               <Route path="/mypage/SavedPost/*" element={<SavedPost/>} />
@@ -65,6 +69,7 @@ const App = () => {
             </>
           )}
           <Route path="/" element={<Main />} />
+          <Route path="/MBTI/MBTItest/*" element={<MBTItest/>} />
         </Routes>
       </BrowserRouter>
     </div>

@@ -5,7 +5,7 @@ import {React, useState} from 'react';
 export default function Header() {
       return(
       <div>
-            <img src={logo} alt="로고" />
+            <Link to="/"><img src={logo} alt="로고" /></Link>
               <form>
                     <input
                     type="text"
@@ -17,7 +17,7 @@ export default function Header() {
                   <ul>
                       <li><Link to="/Shop/Shop" >  쇼핑 </Link> </li>
                       <li><Link to="/Community" >  커뮤니티 </Link> </li>
-                      <li> <Link to="/MyPage"> 마이페이지 </Link> </li>
+                      <li> <Link to="/mypage"> 마이페이지 </Link> </li>
                   </ul>
               </span>
         </div>
