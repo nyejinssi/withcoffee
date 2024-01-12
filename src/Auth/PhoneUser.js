@@ -15,7 +15,6 @@ const UserInfo = () => {
       const uid = user.uid;
     
       const nickname = event.target.elements.nickname.value;
-      const name = event.target.elements.name.value;
       let phoneNumber = event.target.elements.phoneNumber.value;
     
       // Remove non-numeric characters from the phone number
@@ -35,11 +34,10 @@ const UserInfo = () => {
           updateDoc(userDocRef, {
             nickname: nickname,
             phoneNumber: phoneNumber,
-            name: name
+            // Add other fields as needed
           });
     
-          console.log('User information updated successfully');
-          navigate('/Auth/SignUpDone');
+          console.log('정보 입력 완료!');
         }
       });
     };
@@ -47,16 +45,16 @@ const UserInfo = () => {
       return (
         <div>
           <form onSubmit={handleSubmit}>
-          <label> 닉네임
+            <label> 닉네임
               <input type="text" name="nickname" placeholder='닉네임' required />
             </label>
             <br />
-            <label> 전화번호
-              <input type="text" name="phoneNumber" placeholder='01011111111' required />
+            <label> 이름
+              <input type="text" name="name" placeholder='이름' required />
             </label>
             <br />
-            <label> 이름
-              <input type="text" name="name" placeholder='홍길동' required />
+            <label> 이메일
+              <input type="text" name="email" placeholder='email' required />
             </label>
             <br />
             <button type="submit">저장</button>
@@ -66,3 +64,4 @@ const UserInfo = () => {
         }    
 
 export default UserInfo; 
+

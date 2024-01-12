@@ -18,4 +18,4 @@ const app = initializeApp(firebaseConfig);
 export const authService = getAuth();
 export const dbService = getFirestore();
 export const storageService = getStorage();
-authService.languageCode = 'ko';
+authService.languageCode = 'it';

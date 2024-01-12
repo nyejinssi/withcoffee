@@ -7,7 +7,12 @@ import Headers from './header/Headers';
 import UserHeader from './header/UserHeader';
 //--------------------------Sign------------------------------
 import Sign from './Auth/Sign';
+import SignIn from './Auth/SignIn';
+import PhoneSignIn from './Auth/PhoneSignIn';
 import UserInfo from './Auth/UserInfo';
+import PhoneUser from './Auth/PhoneUser';
+import SignUpDone from './Auth/SignUpDone';
+
 //-----------------------community--------------------------
 import WritePost from './community/WritePost';
 import CommunityHome from './community/CommunityHome';
@@ -15,6 +20,7 @@ import Post from './community/Post';
 import PostDetail from './community/PostDetail';
 import PopularPosts from './community/PopularPosts';
 import Edit from './community/Edit';
+
 //-------------MyPage-------------
 import Home from './MyPage/Home';
 import MyComment from './MyPage/MyComment';
@@ -50,8 +56,10 @@ const App = () => {
         <Routes>
           {isLoggedIn ? (
             <>
-              <Route path="/Auth/UserInfo" element={<UserInfo/>} />
-              
+              <Route path="/Auth/Info" element={<UserInfo/>} />
+              <Route path="/Auth/Info" element={<PhoneUser/>} />
+              <Route path="/Auth/SignUpDone" element={<SignUpDone/>} />
+
               <Route path="/community/Post" element={<Post/>} /> 
               <Route path="/community/write" element={<WritePost/>} /> 
               <Route path="/community/*" element={<CommunityHome/>} />
@@ -66,6 +74,8 @@ const App = () => {
           ):(
             <>
               <Route path="/Auth" element={<Sign/>} />
+              <Route path="/SignIn" element={<SignIn/>} />
+              <Route path="/PhoneSignIn" element={<PhoneSignIn/>} />
             </>
           )}
           <Route path="/" element={<Main />} />
