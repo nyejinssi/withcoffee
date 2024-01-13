@@ -45,20 +45,24 @@ const PhoneSignIn = () => {
       return verificationCode;
     };
 
-    const onClickHandle2 = async () => {
-      try {
-        const code = getCodeFromUserInput();
-    
-        if (window.confirmationResult) {
-          const result = await window.confirmationResult.confirm(code);
-    
+    // Inside the onClickHandle2 function
+  const onClickHandle2 = async () => {
+    try {
+      const code = getCodeFromUserInput();
+
+      if (window.confirmationResult) {
+        const result = await window.confirmationResult.confirm(code);
+
+        // Check if user is signed in
+        if (authService.currentUser) {
+          const user = authService.currentUser;
+
           // User signed in successfully.
           const querySnapshot = await getDocs(query(collection(dbService, 'User'), where('id', '==', phoneNumber)));
           const userExists = querySnapshot.size > 0;
-    
+
           if (!userExists) {
             // If the user doesn't exist, add to Firestore
-            const user = authService.user;
             await addDoc(collection(dbService, 'User'), {
               createrId: user.uid,
               id: phoneNumber,
@@ -69,12 +73,16 @@ const PhoneSignIn = () => {
           }
           navigate('/');
         } else {
-          console.error("Confirmation result is null.");
+          console.error("User is not signed in.");
         }
-      } catch (error) {
-        console.error("Phone number sign-in verification failed:", error.message);
+      } else {
+        console.error("Confirmation result is null.");
       }
-    };
+    } catch (error) {
+      console.error("Phone number sign-in verification failed:", error.message);
+    }
+  };
+
     
 
     return (

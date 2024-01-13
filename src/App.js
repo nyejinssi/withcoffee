@@ -7,12 +7,11 @@ import Headers from './header/Headers';
 import UserHeader from './header/UserHeader';
 //--------------------------Sign------------------------------
 import Sign from './Auth/Sign';
-import SignIn from './Auth/SignIn';
 import PhoneSignIn from './Auth/PhoneSignIn';
 import UserInfo from './Auth/UserInfo';
 import PhoneUser from './Auth/PhoneUser';
 import SignUpDone from './Auth/SignUpDone';
-
+import Logout from './Auth/Logout';
 //-----------------------community--------------------------
 import WritePost from './community/WritePost';
 import CommunityHome from './community/CommunityHome';
@@ -59,6 +58,7 @@ const App = () => {
               <Route path="/Auth/Info/Email" element={<UserInfo/>} />
               <Route path="/Auth/Info/Phone" element={<PhoneUser/>} />
               <Route path="/Auth/SignUpDone" element={<SignUpDone/>} />
+              <Route path="/Auth/logout" element={<Logout/>} />
               <Route path="/community/Post" element={<Post/>} /> 
               <Route path="/community/write" element={<WritePost/>} /> 
               <Route path="/community/*" element={<CommunityHome/>} />
@@ -73,12 +73,11 @@ const App = () => {
           ):(
             <>
               <Route path="/Auth" element={<Sign/>} />
-              <Route path="/SignIn" element={<SignIn/>} />
-              <Route path="/Auth/PhoneSignIn" element={<PhoneSignIn/>} />
             </>
           )}
           <Route path="/" element={<Main />} />
           <Route path="/MBTI/MBTItest/*" element={<MBTItest/>} />
+          <Route path="/Auth/PhoneSignIn" element={<PhoneSignIn/>} />
         </Routes>
       </BrowserRouter>
     </div>

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { authService, dbService } from '../fbase';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { doc,  getDoc, getDocs,  updateDoc,  arrayUnion,  collection,  addDoc,
     query,  orderBy,  onSnapshot, where, deleteDoc} from 'firebase/firestore';
 
 const UpdateInfo = () => {
+  const navigate = useNavigate();
   const user = authService.currentUser;
+  const location = useLocation();
   const [name, setName] = useState('');
   const [nickname, setNickname] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -59,6 +61,8 @@ const UpdateInfo = () => {
         });
   
         console.log('User information updated successfully.');
+        alert('User information updated successfully!');
+        navigate('/');
       } else {
         console.error('User document not found for createrId:', user.uid);
       }
@@ -71,32 +75,31 @@ const UpdateInfo = () => {
   
 
   return (
-    <div>
-      <nav>
+    <div className="home-container">
+      <nav className="home-nav">
         <ul>
-          <li><Link to="/mypage">내가 쓴 글</Link></li>
-          <li><Link to="/mypage/MyComment">댓글단 글</Link></li>
-          <li><Link to="/mypage/SavedPost">저장한 글</Link></li>
-          <li><Link to="/mypage/UpdateInfo">내 정보 수정</Link></li>
+        <li className={location.pathname === '/mypage' ? 'active' : ''}><Link to="/mypage">내가 쓴 글</Link></li>
+          <li className={location.pathname === '/mypage/MyComment' ? 'active' : ''}><Link to="/mypage/MyComment">댓글단 글</Link></li>
+          <li className={location.pathname === '/mypage/SavedPost' ? 'active' : ''}><Link to="/mypage/SavedPost">저장한 글</Link></li>
+          <li className={location.pathname === '/mypage/UpdateInfo' ? 'active' : ''}><Link to="/mypage/UpdateInfo">내 정보 수정</Link></li>
+          <li>내가 쓴 리뷰</li>
+          <li>관심상품</li>
         </ul>
       </nav>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} style={{ textAlign: 'center' }}>
         <label>
-          이름:
-          <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="당신의 이름을 입력해주세요!" />
+          <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="이름) 윗커피" />
         </label>
         <br />
         <label>
-          닉네임:
-          <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value)} placeholder="당신의 닉네임을 입력해주세요!" />
+          <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value)} placeholder="닉네임) 커피조아" />
         </label>
         <br />
         <label>
-          전화번호:
-          <input type="String" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} placeholder="당신의 전화번호를 입력해주세요!" />
+          <input type="String" style={{width:'300px'}} value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} placeholder="전화번호) 01012121212" />
         </label>
         <br />
-        <button type="submit" disabled={loading}>
+        <button type="submit" disabled={loading} style={{ margin: '0 auto'}}>
           {loading ? 'Updating...' : '수정'}
         </button>
       </form>

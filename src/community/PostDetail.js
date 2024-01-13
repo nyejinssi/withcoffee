@@ -230,9 +230,9 @@ const PostDetail = () => {
 )}
 
           <p> {post.like}</p>
-          <button onClick={handleLikeClick}> 좋아요 </button>
+          <button onClick={handleLikeClick} style={{ backgroundColor:'#ffffff', border: '#ffffff', textAlign:'center'}}> ❤️ </button>
           <p> {post.scrap}</p>
-          <button onClick={handleScrapClick}> 저장 </button>
+          <button onClick={handleScrapClick} style={{ backgroundColor:'#ffffff', border: '#ffffff', textAlign:'center'}}> ✅</button>
           <p> 댓글 수: {post.commentid ? post.commentid.length : 0}</p>
           <ul>
             {comments.map((comment) => (
