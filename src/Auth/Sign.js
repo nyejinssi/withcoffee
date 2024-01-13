@@ -1,0 +1,137 @@
+import React, { useState } from 'react';
+import { authService, dbService } from '../fbase';
+import { getAuth, GoogleAuthProvider, signInWithPopup , createUserWithEmailAndPassword, 
+  RecaptchaVerifier, signInWithPhoneNumber
+} from "firebase/auth";
+
+import { getFirestore, addDoc, getDocs, collection, query, onSnapshot, orderBy, serverTimestamp } from "firebase/firestore";
+import { useNavigate, Link } from 'react-router-dom';
+import logo from '../header/HeaderLogo.png';
+import GoogleLogin from './btn_google_signin_light_normal_web.png';
+
+const Sign = () => {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [newAccount, setNewAccount] = useState(true);
+  const [error, setError] = useState("");
+
+  const onChange = (event) => {
+    const { target: { name, value }, } = event;
+    if (name === "email") { setEmail(value);
+    } else if (name === "password") { setPassword(value);}};
+  
+  const onSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      let data;
+      if (newAccount) { // 계정 생성
+        data = await createUserWithEmailAndPassword(authService, email, password)
+        .then((userCredential) => {
+          console.log("회원가입 성공");
+          const user = userCredential.user;
+          addDoc(collection(dbService, 'SignUp'), {
+            createdAt: serverTimestamp(), // Timestamp of the sign-up
+            email: email,
+            pw: password});
+          addDoc(collection(dbService, 'User'), {
+            createdAt: serverTimestamp(),
+            createrId: user.uid
+          });  
+          navigate('/Auth/Info/Email');
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          // ..
+        });
+      } else {
+        // log in
+        data = await authService.signInWithEmailAndPassword(email, password);
+        navigate('/');
+      }
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  const onSocialClick = async (event) => {
+      const { target: {name},} = event;
+      let provider;
+      if (name === "google"){ 
+          provider = new GoogleAuthProvider(); 
+      } 
+      try {
+          const { user } = await signInWithPopup(authService, provider);
+          console.log("구글로 회원가입 하기를 선택하셨습니다.");
+          await addDoc(collection(dbService, 'User'), {
+              createdAt: serverTimestamp(), // Timestamp of the sign-up
+              createrId: user.uid,
+              name: user.displayName,
+              email: user.email          
+            // Add other fields as needed
+          });
+          navigate('./UserInfo');
+        } catch (error) {
+          console.error('Error signing in with social provider:', error);
+        }
+      };
+
+  const toggleAccount = () => setNewAccount((prev) => !prev);
+  const PhoneClick = () => {
+    navigate('/Auth/PhoneSignIn');
+  };
+  
+
+  return (
+    <>
+    <div>
+                    <table>              
+                            <tr>
+                                <td ><img src={logo} className="logo_img" alt="logo" /> </td>
+                                <td> 로그인 | 회원가입 </td>
+                            </tr>
+                    </table>
+                </div>
+                <div>
+                <button onClick={toggleAccount} className="authSwitch">
+                  {newAccount ? "로그인 하러가기" : "계정생성 하러가기"}
+                </button>
+                <form onSubmit={onSubmit} className="container">
+                  <input
+                    name="email"
+                    type="text"
+                    placeholder="Email"
+                    required
+                    value={email}
+                    onChange={onChange}
+                    className="authInput"
+                  />
+                  <input
+                    name="password"
+                    type="password"
+                    placeholder="Password"
+                    required
+                    value={password}
+                    onChange={onChange}
+                    className="authInput"
+                  />
+                  <input
+                    type="submit"
+                    value={newAccount ? "회원가입" : "로그인"}
+                    className="authInput authSubmit"
+                  />
+                  {error && <span className="authError">{error}</span>}
+                </form>
+                </div>
+                <div>
+                <button onClick={PhoneClick} alt='전화번호로 로그인'>전화번호로 회원가입 | 로그인 </button>
+                </div>
+                <div>
+                        <img className='G-SingIn' src={GoogleLogin} onClick={onSocialClick} name="google" alt="구글로 로그인" />
+                </div>
+    </>
+  );
+}    
+
+export default Sign; 

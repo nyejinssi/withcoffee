@@ -2,16 +2,13 @@ import React, { useState } from 'react';
 import Link from 'react-dom/client';
 import {qnaList, infoList} from './MBTIdata';
 import './qna.css';
-import './animation.css';
 import './mbti_result.css';
-
 
 const MBTItest = () => {
   const [qIdx, setQIdx] = useState(0);
   const [mbtiSelect, setMbtiSelect] = useState([...Array(27)].map(() => 0));
 
   const calResult = () => {
-    console.log(mbtiSelect);
     var resultArray = mbtiSelect.indexOf(Math.max(...mbtiSelect));
     return resultArray;
 }
@@ -148,21 +145,15 @@ const MBTItest = () => {
           <h3 className="pt-2 pb-5" style={{ textAlign: 'end' }}>
             그리고 새로운 원두를 도전해보고 싶은 당신!
           </h3>
+          <br/>
           <h3 className="pb-5" style={{ textAlign: 'center' }}>
             '나의 커피 취향'이 궁금한 당신을 위한
           </h3>
-          <h1 style={{ textAlign: 'center', fontWeight: 'bolder' }}>커피 MBTI</h1>
+          
+          <h1 >커피 MBTI</h1>
           <button
             type="button"
             className="btn btn-secondary btn-lg"
-            style={{
-              backgroundColor: '#EAD8AA',
-              display: 'block',
-              margin: 'auto',
-              marginTop: 50,
-              marginBottom: 10,
-              border:"none"
-            }}
             onClick={begin}
           >
             시작하기
@@ -172,7 +163,7 @@ const MBTItest = () => {
           <div className="status mx-auto mt-8">
             <div className="statusBar" />
           </div>
-          <div className="qBox my-5 py-3 mx-auto" style={{backgroundColor: '#EAD8AA', fontWeight:"600"}} />
+          <div className="qBox my-5 py-3 mx-auto"  />
           <div className="answerBox mx-auto">
             <div className="row row-cols-1 row-cols-md-2 g-2">
               <div className="col">
@@ -198,23 +189,12 @@ const MBTItest = () => {
         </section>
         <section id="mbti_result">
           <div
-            style={{
-              textAlign: 'left',
-              paddingLeft: 0,
-              fontSize: "2rem",
-              fontWeight: 800
-            }}
           >
             당신의 커피 취향
           </div>
           <div
             className="resultName"
-            style={{
-              paddingTop: 20,
-              paddingBottom: 20,
-              fontSize: "1.3rem",
-              fontWeight: 600
-            }}
+            
           ></div>
           <div
             id="resultImage"
@@ -230,7 +210,7 @@ const MBTItest = () => {
             style={{
             }}
           ></div>
-          <button type="button" className="btn btn-secondary btn-lg buyMBTI"  style={{ bottom: 20, marginTop: 20, backgroundColor:'#EAD8AA', border:'none', color:'black' }}>
+          <button type="button" className="btn btn-secondary btn-lg buyMBTI" >
             구매하러 가기
           </button>
         </section>

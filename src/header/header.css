@@ -1,0 +1,91 @@
+/* Resetting default margin and padding for all elements */
+* {
+  margin: 0px 0px;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Header styles */
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: -5px 400px; /* Adjust the padding as needed */
+  background-color: #000000; /* Set your desired background color */
+  color: #fff; /* Set your desired text color */
+}
+
+.logo-link {
+  text-decoration: none;
+  margin-right: -300px;
+}
+
+.logo-img {
+  width: 150px; /* Adjust the width of the logo */
+  height: auto;
+  margin-right: -100px; /* Adjust the margin as needed */
+}
+
+.search-form {
+  flex-grow: 1;
+  display: flex;
+  align-items: center; /* Align items vertically in the center */
+  margin: 0; /* Remove margin */
+  box-shadow: none;
+  border: none;
+}
+
+.search-input {
+  width: 80%;
+  font-size: 14px; /* Adjust as needed */
+  height: 36px; /* Set the desired height for the search input */
+  box-sizing: border-box; /* Use border-box to include padding and border in the total width and height */
+  padding: 8px; /* Adjust as needed */
+  margin: 0; /* Remove margin */
+}
+
+.search-icon {
+  width: 16px; /* Adjust the width of the search icon */
+  margin-right: 5px; /* Add margin for spacing (adjust as needed) */
+}
+
+.search-button {
+  width: 5%;
+  padding: 8px; /* Adjust as needed */
+  cursor: pointer;
+  background-color: #ffffff; /* Set your desired button color */
+  color: #fff; /* Set your desired button text color */
+  border: none;
+  height: 36px; /* Set the same height as the search input */
+  box-sizing: border-box; /* Use border-box to include padding and border in the total width and height */
+  margin: 0; /* Remove margin */
+}
+
+.user-links {
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.user-link {
+  font-size: 14px; /* Adjust the font size for user links */
+  font-weight: bold;
+  margin-right: 10px;
+  text-decoration: none;
+  color: #fff; /* Set your desired link color */
+}
+
+/* Additional styles for the navigation links */
+.nav-links {
+  display: flex;
+  text-align: right;
+}
+
+.nav-link {
+  font-size: 14px; /* Adjust the font size for navigation links */
+  font-weight: bold;
+  margin-right: 10px;
+  text-align: right;
+  text-decoration: none;
+  color: #fff; /* Set your desired link color */
+}
