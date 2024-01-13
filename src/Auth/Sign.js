@@ -79,7 +79,7 @@ const Sign = () => {
 
   const toggleAccount = () => setNewAccount((prev) => !prev);
   const PhoneClick = () => {
-    navigate('/Auth/PhoneSign');
+    navigate('/Auth/PhoneSignIn');
   };
   
 

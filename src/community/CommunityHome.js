@@ -3,6 +3,7 @@ import WritePost from './WritePost';
 import PopularPosts from './PopularPosts';
 import Post from './Post'; // Import the Posts component
 import { useNavigate, Link , useLocation } from 'react-router-dom';
+import './community.css';
 
 const CommunityHome = () => {
   const navigate = useNavigate();
@@ -26,15 +27,15 @@ const CommunityHome = () => {
   };
 
   return (
-    <div>
-      <nav>
+    <div className="community-container">
+      <nav className="community-nav">
         <ul>
-          <li><Link to="/community/popular" >인기</Link></li>
-          <li><Link to="/community/freedom" onClick={() => handleCategoryClick('freedom')} >자유</Link></li>
-          <li><Link to="/community/coffeeBean" onClick={() => handleCategoryClick('coffeBean')}>원두</Link></li>
-          <li><Link to="/community/tools" onClick={() => handleCategoryClick('tools')} >도구</Link></li>
-          <li><Link to="/community/startup" onClick={() => handleCategoryClick('startup')} >창업</Link></li>
-          <li><Link to="/community/promotion" onClick={() => handleCategoryClick('promotion')} >홍보</Link></li>
+          <li><Link to="/community/popular">인기</Link></li>
+          <li><Link to="/community/freedom" onClick={() => handleCategoryClick('freedom')}>자유</Link></li>
+          <li><Link to="/community/coffeeBean" onClick={() => handleCategoryClick('coffeeBean')}>원두</Link></li>
+          <li><Link to="/community/tools" onClick={() => handleCategoryClick('tools')}>도구</Link></li>
+          <li><Link to="/community/startup" onClick={() => handleCategoryClick('startup')}>창업</Link></li>
+          <li><Link to="/community/promotion" onClick={() => handleCategoryClick('promotion')}>홍보</Link></li>
         </ul>
       </nav>
 
@@ -43,7 +44,7 @@ const CommunityHome = () => {
       ) : (
         <Post category={category} />
       )}
-      <button onClick={handleWritePostClick}>글쓰기</button>
+      <button className="community-button" onClick={handleWritePostClick}>글쓰기</button>
     </div>
   );
 };

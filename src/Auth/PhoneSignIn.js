@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { authService, dbService } from '../fbase';
-import { getAuth, GoogleAuthProvider, signInWithPopup , createUserWithEmailAndPassword, 
-  RecaptchaVerifier, signInWithPhoneNumber
+import { getAuth,RecaptchaVerifier,
+  signInWithPhoneNumber,
+  setPersistence,
+  browserLocalPersistence
 } from "firebase/auth";
-
-import { getFirestore, addDoc, getDocs, collection, query, onSnapshot, orderBy, serverTimestamp } from "firebase/firestore";
-import { useNavigate, Link } from 'react-router-dom';
+import {getFirestore, addDoc, getDocs, collection, query, where, serverTimestamp } from "firebase/firestore";
+import { useNavigate } from 'react-router-dom';
 import logo from '../header/HeaderLogo.png';
-import GoogleLogin from './btn_google_signin_light_normal_web.png';
 
-const PhoneSign = () => {
+
+const PhoneSignIn = () => {
   const user = authService.currentUser;
   const navigate = useNavigate();
   const [value, Setvalue] = useState("");
@@ -50,33 +51,36 @@ const PhoneSign = () => {
         .confirm(code)
         .then((result) => {
           // User signed in successfully.
-          const user = result.user;
-          console.log("hey YOU ARE IN SUCCESS");
-          addDoc(collection(dbService, 'User'), {
-            createrId: user.uid,
-            id: phoneNumber
-          // Add other fields as needed
-          });
-
-          navigate('/Auth/Info');
+          const querySnapshot = getDocs(query(collection(dbService, 'User'), where('id', '==', phoneNumber)));
+          const userExists = querySnapshot.size > 0;
+          if (!userExists) {
+            // If the user doesn't exist, add to Firestore
+            addDoc(collection(dbService, 'User'), {
+              createrId: user.uid,
+              id: phoneNumber,
+              createdAt: serverTimestamp()
+              // Add other fields as needed
+            });
+          }
+          // Navigate to the appropriate location based on user existence
+          navigate(userExists ? '/' : '/Auth/Info');
         })
         .catch((error) => {
-          // User couldn't sign in (bad verification code?)
-          // ...
+          console.error("Phone number sign-in verification failed:", error);
         });
     };
 
-        return (
-                <>
-                <div>
-                  <div id="sign-in-button"></div>
-                  <input onChange={(e) => Setvalue(e.target.value)} type="text" />
-                  <button onClick={onClickHandle}>문자보내기</button>
-                  <input onChange={(e) => Setvalue(e.target.value)} type="text" value={phoneNumber}/>
-                  <button onClick={onClickHandle2}>인증번호 확인하기</button>
-                </div>
-            </>
-             );
-        }    
+    return (
+      <>
+      <div>
+        <div id="sign-in-button"></div>
+        <input onChange={(e) => Setvalue(e.target.value)} type="text" />
+        <button onClick={onClickHandle}>문자보내기</button>
+        <input onChange={(e) => Setvalue(e.target.value)} type="text" value={phoneNumber}/>
+        <button onClick={onClickHandle2}>인증번호 확인하기</button>
+      </div>
+  </>
+   );
+}    
 
-export default PhoneSign; 
+export default PhoneSignIn; 

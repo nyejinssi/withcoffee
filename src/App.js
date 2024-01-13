@@ -59,7 +59,6 @@ const App = () => {
               <Route path="/Auth/Info" element={<UserInfo/>} />
               <Route path="/Auth/Info" element={<PhoneUser/>} />
               <Route path="/Auth/SignUpDone" element={<SignUpDone/>} />
-
               <Route path="/community/Post" element={<Post/>} /> 
               <Route path="/community/write" element={<WritePost/>} /> 
               <Route path="/community/*" element={<CommunityHome/>} />
@@ -75,7 +74,7 @@ const App = () => {
             <>
               <Route path="/Auth" element={<Sign/>} />
               <Route path="/SignIn" element={<SignIn/>} />
-              <Route path="/PhoneSignIn" element={<PhoneSignIn/>} />
+              <Route path="/Auth/PhoneSignIn" element={<PhoneSignIn/>} />
             </>
           )}
           <Route path="/" element={<Main />} />
