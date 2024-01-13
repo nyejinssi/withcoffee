@@ -38,6 +38,7 @@ const UserInfo = () => {
           });
     
           console.log('정보 입력 완료!');
+          navigate('Auth/SignUpDone');
         }
       });
     };

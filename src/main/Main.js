@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import MBTIbackground from './coffeembti.png';
-import './Home.css';
+
 
 const Main = () => {
   return (

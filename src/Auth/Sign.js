@@ -38,7 +38,7 @@ const Sign = () => {
             createdAt: serverTimestamp(),
             createrId: user.uid
           });  
-          navigate('/Auth/UserInfo');
+          navigate('/Auth/Info/Email');
         })
         .catch((error) => {
           const errorCode = error.code;

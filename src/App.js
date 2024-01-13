@@ -56,8 +56,8 @@ const App = () => {
         <Routes>
           {isLoggedIn ? (
             <>
-              <Route path="/Auth/Info" element={<UserInfo/>} />
-              <Route path="/Auth/Info" element={<PhoneUser/>} />
+              <Route path="/Auth/Info/Email" element={<UserInfo/>} />
+              <Route path="/Auth/Info/Phone" element={<PhoneUser/>} />
               <Route path="/Auth/SignUpDone" element={<SignUpDone/>} />
               <Route path="/community/Post" element={<Post/>} /> 
               <Route path="/community/write" element={<WritePost/>} /> 

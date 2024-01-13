@@ -11,7 +11,6 @@ import logo from '../header/HeaderLogo.png';
 
 
 const PhoneSignIn = () => {
-  const user = authService.currentUser;
   const navigate = useNavigate();
   const [value, Setvalue] = useState("");
   const appVerifier = window.recaptchaVerifier; 
@@ -66,10 +65,9 @@ const PhoneSignIn = () => {
               createdAt: serverTimestamp(),
               // Add other fields as needed
             });
+            navigate('Auth/Info/Phone');
           }
-    
-          // Navigate to the appropriate location based on user existence
-          navigate(userExists ? '/' : '/Auth/Info');
+          navigate('/');
         } else {
           console.error("Confirmation result is null.");
         }
@@ -82,10 +80,9 @@ const PhoneSignIn = () => {
     return (
       <>
       <div>
-        <div id="sign-in-button"></div>
-        <input onChange={(e) => Setvalue(e.target.value)} type="text" />
-        <button onClick={onClickHandle}>문자보내기</button>
-        <input onChange={(e) => setVerificationCode(e.target.value)} type="text" value={verificationCode} />
+        <div id="sign-in-button"></div>전화번호 <input onChange={(e) => Setvalue(e.target.value)} type="text" placeholder='01011111111'/>
+        <button onClick={onClickHandle}>문자보내기</button><br/>
+        인증번호 <input onChange={(e) => setVerificationCode(e.target.value)} type="text" value={verificationCode} placeholder='010101'/>
         <button onClick={onClickHandle2}>인증번호 확인하기</button>
       </div>
   </>
