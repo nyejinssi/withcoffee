@@ -16,6 +16,7 @@ const PhoneSignIn = () => {
   const [value, Setvalue] = useState("");
   const appVerifier = window.recaptchaVerifier; 
   const [phoneNumber, SetPhoneNumber] = useState("");
+  const [verificationCode, setVerificationCode] = useState("");
 
     const getPhoneNumberFromUserInput = () => {
       const phoneNumber = "+82" + value.substring(1);
@@ -42,33 +43,41 @@ const PhoneSignIn = () => {
     };
 
     const getCodeFromUserInput = () => {
-      return value;
+      return verificationCode;
     };
 
-    const onClickHandle2 = () => {
-      const code = getCodeFromUserInput();
-      window.confirmationResult
-        .confirm(code)
-        .then((result) => {
+    const onClickHandle2 = async () => {
+      try {
+        const code = getCodeFromUserInput();
+    
+        if (window.confirmationResult) {
+          const result = await window.confirmationResult.confirm(code);
+    
           // User signed in successfully.
-          const querySnapshot = getDocs(query(collection(dbService, 'User'), where('id', '==', phoneNumber)));
+          const querySnapshot = await getDocs(query(collection(dbService, 'User'), where('id', '==', phoneNumber)));
           const userExists = querySnapshot.size > 0;
+    
           if (!userExists) {
             // If the user doesn't exist, add to Firestore
-            addDoc(collection(dbService, 'User'), {
+            const user = authService.user;
+            await addDoc(collection(dbService, 'User'), {
               createrId: user.uid,
               id: phoneNumber,
-              createdAt: serverTimestamp()
+              createdAt: serverTimestamp(),
               // Add other fields as needed
             });
           }
+    
           // Navigate to the appropriate location based on user existence
           navigate(userExists ? '/' : '/Auth/Info');
-        })
-        .catch((error) => {
-          console.error("Phone number sign-in verification failed:", error);
-        });
+        } else {
+          console.error("Confirmation result is null.");
+        }
+      } catch (error) {
+        console.error("Phone number sign-in verification failed:", error.message);
+      }
     };
+    
 
     return (
       <>
@@ -76,7 +85,7 @@ const PhoneSignIn = () => {
         <div id="sign-in-button"></div>
         <input onChange={(e) => Setvalue(e.target.value)} type="text" />
         <button onClick={onClickHandle}>문자보내기</button>
-        <input onChange={(e) => Setvalue(e.target.value)} type="text" value={phoneNumber}/>
+        <input onChange={(e) => setVerificationCode(e.target.value)} type="text" value={verificationCode} />
         <button onClick={onClickHandle2}>인증번호 확인하기</button>
       </div>
   </>

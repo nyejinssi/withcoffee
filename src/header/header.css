@@ -31,6 +31,8 @@
   display: flex;
   align-items: center; /* Align items vertically in the center */
   margin: 0; /* Remove margin */
+  box-shadow: none;
+  border: none;
 }
 
 .search-input {
