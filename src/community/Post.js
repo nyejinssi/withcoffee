@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { dbService } from '../fbase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
+import './community.css';
 
 const Posts = ({ category, setCategory }) => {
   const [posts, setPosts] = useState([]);
@@ -31,17 +32,15 @@ const Posts = ({ category, setCategory }) => {
   }, [category]);
 
   return (
-    <div>
-      <ul>
+    <div className="posts-container">
+      <ul className="posts-list">
         {posts.map((post) => (
-          <li key={post.id}>
+          <li key={post.id} className="posts-list-item">
             <Link to={`/community/${category}/${post.id}`}>
               <h3>{post.PostTitle}</h3>
             </Link>
-            <p> 시간 : {new Date(post.time).toLocaleString()}</p>
-            <p> 글쓴이 : {post.Writer}</p>
-            <p> 좋아요 : {post.like}</p>
-            <p> 댓글 : {post.commentid.length}</p>
+            <p className="posts-metadata"> 👨‍💻 {post.Writer} | ❤️{post.like} | 💬{post.commentid.length}</p>
+            <p className="posts-metadata"> {new Date(post.time).toLocaleString()}</p>
           </li>
         ))}
       </ul>

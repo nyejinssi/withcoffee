@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { authService, dbService, storageService } from '../fbase';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { ref, deleteObject, uploadBytes, getDownloadURL } from 'firebase/storage';
+import './community.css';
 
 const Edit = () => {
   const navigate = useNavigate();

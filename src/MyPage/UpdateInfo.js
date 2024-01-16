@@ -99,7 +99,7 @@ const UpdateInfo = () => {
           <input type="String" style={{width:'300px'}} value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} placeholder="전화번호) 01012121212" />
         </label>
         <br />
-        <button type="submit" disabled={loading} style={{ margin: '0 auto'}}>
+        <button type="submit" disabled={loading} style={{ margin: '0 auto',  backgroundColor:'black', color:'white', border:'gray'}}>
           {loading ? 'Updating...' : '수정'}
         </button>
       </form>

@@ -58,10 +58,10 @@ const MyComment = () => {
       </ul>
     </nav>
 
-    <div className="home-posts">
-        <ul>
+    <div className="posts-container">
+        <ul className="posts-list" >
           {myComments.map((comment) => (
-            <li key={comment.id}>
+            <li key={comment.id} className="posts-list-item">
               <Link to={`/community/${comment.postClass}/${comment.postid}`}>
               <p>{comment.postTitle}</p>
               <p>{comment.text.substring(0, 50)}...</p>

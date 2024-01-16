@@ -6,6 +6,7 @@ import MBTIbackground from './coffeembti.png';
 const Main = () => {
   return (
     <div style={{ position: 'relative', textAlign: 'center' }}>
+      <br /><br /><br/><br />
       <img src={MBTIbackground} alt="Example" style={{ maxWidth: '100%', height: 'auto' }} />
       <div
         id="mbti_box"

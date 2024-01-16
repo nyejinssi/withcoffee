@@ -48,13 +48,12 @@ const SavedPost = () => {
         </ul>
       </nav>
 
-      <div className="home-posts">
-      <ul>
+      <div className="posts-container">
+      <ul className="posts-list" >
         {mySavedPosts.map((post) => (
-          <li key={post.id}>
+          <li key={post.id} className="posts-list-item">
             <Link to={`/community/${post.Class}/${post.id}`}>{post.PostTitle}</Link>
-            <p>좋아요 수: {post.like}</p>
-            <p>댓글 수: {post.commentid ? post.commentid.length : 0}</p>
+            <p className="posts-metadata">❤️ {post.like} | 💬 {post.commentid ? post.commentid.length : 0}</p>
           </li>
         ))}
         </ul>

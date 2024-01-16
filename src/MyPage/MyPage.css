@@ -44,4 +44,38 @@
   .home-nav li.active a {
     color: white;
   }
+  .posts-container {
+    margin-top: 20px;
+  }
+  
+  .posts-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .posts-list-item {
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+  }
+  
+  .posts-list-item a {
+    text-decoration: none;
+    color: #333;
+  }
+  
+  .posts-list-item h3 {
+    margin: 0;
+    font-size: 1.2em;
+  }
+  
+  .posts-metadata {
+    color: #555;
+    font-size: 0.8em;
+  }
+  
+  .posts-metadata p {
+    margin: 5px 0;
+  }
+
   
