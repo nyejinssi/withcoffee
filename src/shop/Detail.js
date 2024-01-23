@@ -3,20 +3,17 @@ import { dbService } from '../fbase';
 import { doc, getDoc, getDocs, query, where, collection} from 'firebase/firestore';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FaStar } from 'react-icons/fa';
+import { authService } from '../fbase';
 
 const Detail = () => {
    const [selectedProduct, setSelectedProduct] = useState(null);
    const [reviews, setReviews] = useState([]);
+   const user = authService.currentUser;
 
   const location = useLocation();
   const productId = location.pathname.split('/').pop();
 
   const navigate = useNavigate();
-
-  const handleWriteReview = (productId) => {
-    navigate(`/Review/Write/${productId}`);
-  };
-
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -43,7 +40,19 @@ const Detail = () => {
   
     fetchProduct();
   }, [productId]);
-  
+
+  const handleWriteReview = (productId) => {
+    const user = authService.currentUser;
+
+    if (user) {
+      // User is logged in
+      navigate(`/Review/Write/${productId}`);
+    } else {
+      // User is not logged in
+      navigate('/Auth');
+    }
+  };
+
 
   const getTypeString = (type) => { //타입
     switch (type) {

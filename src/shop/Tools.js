@@ -4,9 +4,7 @@ import { Link, Route, useLocation } from 'react-router-dom';
 import ProductDetail from './Detail';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 
-const Tools= () => {
-  const location = useLocation();
-  
+const Tools= () => { 
   const [products, setProducts] = useState([]); // 전체 상품 리스트
   const [filteredProducts, setFilteredProducts] = useState([]); // 필터링된 상품 리스트
   const [brandFilter, setBrandFilter] = useState(''); // 브랜드 필터        
@@ -25,6 +23,7 @@ const Tools= () => {
     { value: '3', label: '20만 원 이상' },
   ];
   const types=['에스프레소머신', '캡슐/POD머신', '업소용에스프레소머신', '커피메이커', '우유거품기', '여과지']
+  const [selectedTypes, setSelectedTypes] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,14 +49,14 @@ const Tools= () => {
     const filtered = products.filter(product => {
       return (
         (brandFilter === '' || product.brand === brandFilter) &&
-        (typeFilter === '' || product.type === typeFilter ) &&
+        (selectedTypes.length === 0 || selectedTypes.includes(product.type)) &&
         (priceFilter === '' || checkPriceRange(product.price, priceFilter)) &&
         (rateFilter === '' || checkRating(product.rate, rateFilter))
       );
     });
   
     setFilteredProducts(filtered);
-  }, [brandFilter, typeFilter, priceFilter, rateFilter, products]);  
+  }, [brandFilter, selectedTypes, priceFilter, rateFilter, products]);  
   
   const sortFilteredProducts = () => {
     setFilteredProducts(prevFilteredProducts => {
@@ -156,7 +155,15 @@ const handlePriceFilter = (value) => {
 
 // 단일 선택으로 수정하고, 모든 필터가 checked된 상태에서 다시 클릭하면 해제
 const handleTypeFilter = (value) => {
-  setTypeFilter((prevFilter) => (prevFilter === value ? '' : value));
+  setSelectedTypes((prevSelectedTypes) => {
+    if (prevSelectedTypes.includes(value)) {
+      // If the type is already selected, remove it
+      return prevSelectedTypes.filter((type) => type !== value);
+    } else {
+      // If the type is not selected, add it
+      return [...prevSelectedTypes, value];
+    }
+  });
 };
 
 const handleRateFilter = (value) => {
@@ -191,12 +198,12 @@ const handleSortOrder = (value) => {
 
       <div>
         <label>카테고리</label>
-        {types.map(type => (
+        {types.map((type) => (
           <label key={type}>
             <input
               type="checkbox"
               value={type}
-              checked={typeFilter.includes(type)}
+              checked={selectedTypes.includes(type)}
               onChange={() => handleTypeFilter(type)}
             />
             {type}

@@ -4,8 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 
 const Beans = () => {
-  const location = useLocation();
-  
+
   const [products, setProducts] = useState([]); // 전체 상품 리스트
   const [filteredProducts, setFilteredProducts] = useState([]); // 필터링된 상품 리스트
   const [brandFilter, setBrandFilter] = useState(''); // 브랜드 필터

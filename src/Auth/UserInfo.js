@@ -10,7 +10,6 @@ const UserInfo = () => {
     const [nickname, setNickname] = useState("");
     const [name, setName] = useState("");
     const [phoneNumber, SetPhoneNumber] = useState("");
-    console.log('ho');
     
     const onChange = (event) => {
       const { target: { name, value } } = event;
@@ -29,7 +28,6 @@ const UserInfo = () => {
 
     const handleSubmit = async (event) => {
       event.preventDefault();
-      console.log("hello")
       const user = authService.currentUser;
       const uid = user.uid;
       

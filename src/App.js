@@ -76,10 +76,6 @@ const App = () => {
               <Route path="/mypage/UpdateInfo/*" element={<UpdateInfo/>} />
               <Route path="/Edit/:postId" element={<Edit />}/>
 
-              <Route path="/shop/Beans" element={<Beans/>}/>
-              <Route path="/shop/Tools" element={<Tools/>}/>
-              <Route path="/shop/Detail/:productId"  element={<Detail/>}/>
-
               <Route path="/Review/Write/:productId" element={<WriteReview/>}/>
             </>
           ):(
@@ -90,6 +86,10 @@ const App = () => {
           <Route path="/" element={<Main />} />
           <Route path="/MBTI/MBTItest/*" element={<MBTItest/>} />
           <Route path="/Auth/PhoneSignIn" element={<PhoneSignIn/>} />
+
+          <Route path="/shop/Beans" element={<Beans/>}/>
+          <Route path="/shop/Tools" element={<Tools/>}/>
+          <Route path="/shop/Detail/:productId"  element={<Detail/>}/>
         </Routes>
       </BrowserRouter>
     </div>
