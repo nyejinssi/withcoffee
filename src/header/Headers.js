@@ -40,9 +40,9 @@ export default function Header() {
           <Link to="/shop/Beans" className="nav-link">
             쇼핑
           </Link>
-          <Link to="/Community" className="nav-link">
+          <div className='nav-link'>
             커뮤니티
-          </Link>
+          </div>
         </div>
       </div>
     </div>
