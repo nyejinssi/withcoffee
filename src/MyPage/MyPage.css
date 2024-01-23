@@ -1,0 +1,81 @@
+/* Inside MyPage.css */
+
+.home-container {
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    margin: 0 15%; /* 15% margin on both sides */
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .home-nav {
+    text-align: center;
+  }
+  
+  .home-nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    text-align: center;
+  }
+  
+  .home-nav li {
+    margin-right: 10px;
+    text-align: center;
+  }
+  
+  /* Add styles for the active link */
+  .home-nav li.active {
+    background-color: black;
+  }
+  
+  .home-nav a {
+    text-decoration: none;
+    color: #333;
+    transition: color 0.3s; /* Add a smooth transition effect for color change */
+  }
+  
+  .home-nav a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Change text color and background color on link click */
+  .home-nav li.active a {
+    color: white;
+  }
+  .posts-container {
+    margin-top: 20px;
+  }
+  
+  .posts-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .posts-list-item {
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+  }
+  
+  .posts-list-item a {
+    text-decoration: none;
+    color: #333;
+  }
+  
+  .posts-list-item h3 {
+    margin: 0;
+    font-size: 1.2em;
+  }
+  
+  .posts-metadata {
+    color: #555;
+    font-size: 0.8em;
+  }
+  
+  .posts-metadata p {
+    margin: 5px 0;
+  }
+
+  

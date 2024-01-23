@@ -71,7 +71,7 @@ const Sign = () => {
               email: user.email          
             // Add other fields as needed
           });
-          navigate('./UserInfo');
+          navigate('/Auth/Info/Email');
         } catch (error) {
           console.error('Error signing in with social provider:', error);
         }
@@ -85,51 +85,32 @@ const Sign = () => {
 
   return (
     <>
-    <div>
-                    <table>              
-                            <tr>
-                                <td ><img src={logo} className="logo_img" alt="logo" /> </td>
-                                <td> 로그인 | 회원가입 </td>
-                            </tr>
-                    </table>
-                </div>
-                <div>
-                <button onClick={toggleAccount} className="authSwitch">
-                  {newAccount ? "로그인 하러가기" : "계정생성 하러가기"}
-                </button>
-                <form onSubmit={onSubmit} className="container">
-                  <input
-                    name="email"
-                    type="text"
-                    placeholder="Email"
-                    required
-                    value={email}
-                    onChange={onChange}
-                    className="authInput"
-                  />
-                  <input
-                    name="password"
-                    type="password"
-                    placeholder="Password"
-                    required
-                    value={password}
-                    onChange={onChange}
-                    className="authInput"
-                  />
-                  <input
-                    type="submit"
-                    value={newAccount ? "회원가입" : "로그인"}
-                    className="authInput authSubmit"
-                  />
-                  {error && <span className="authError">{error}</span>}
-                </form>
-                </div>
-                <div>
-                <button onClick={PhoneClick} alt='전화번호로 로그인'>전화번호로 회원가입 | 로그인 </button>
-                </div>
-                <div>
-                        <img className='G-SingIn' src={GoogleLogin} onClick={onSocialClick} name="google" alt="구글로 로그인" />
-                </div>
+      <div style={{ textAlign: 'center', alignItems: 'center' }}>
+          <img src={logo} className="logo_img" alt="logo" style={{width: '10%'}} />
+          <p style={{ fontSize: '1.5em', fontWeight: 'bold' }}>로그인 | 회원가입</p>
+        </div>
+      <div style={{ textAlign: 'center', alignItems: 'center' }}>
+      <br /> <br/>
+        <button onClick={toggleAccount} className="authSwitch" style={{ textAlign: 'center', alignItems: 'center', backgroundColor:'white', color:'black', border:'gray' }}>
+          {newAccount ? "로그인 하러가기" : "계정생성 하러가기"}</button>
+        {/* Center-align the form by adding a wrapper div */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <form onSubmit={onSubmit} style={{ textAlign: 'center', alignItems: 'center' }}>
+            <input name="email" type="text" placeholder="이메일" required value={email} onChange={onChange} style={{ width: '250px' }} />
+            <input name="password" type="password" placeholder="비밀번호" required value={password} onChange={onChange} style={{ width: '250px' }} />
+            <input type="submit" value={newAccount ? "회원가입" : "로그인"} style={{ backgroundColor:'black', color:'white', border:'gray'}}/>
+            {error && <span className="authError">{error}</span>}
+            <br/>
+          </form>
+        </div>
+      </div>
+      <div style={{ textAlign: 'center', alignItems: 'center' }}>
+        <button onClick={PhoneClick} alt='전화번호로 로그인' style={{ backgroundColor:'black', color:'white', border:'gray'}}>전화번호로 회원가입 | 로그인 </button>
+        <br /> <br/>
+      </div>
+      <div style={{ textAlign: 'center', alignItems: 'center' }}>
+        <img className='G-SingIn' src={GoogleLogin} onClick={onSocialClick} name="google" alt="구글로 로그인"  style={{width : '10%'}}/>
+      </div>
     </>
   );
 }    

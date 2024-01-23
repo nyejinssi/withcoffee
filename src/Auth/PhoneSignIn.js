@@ -45,20 +45,24 @@ const PhoneSignIn = () => {
       return verificationCode;
     };
 
-    const onClickHandle2 = async () => {
-      try {
-        const code = getCodeFromUserInput();
-    
-        if (window.confirmationResult) {
-          const result = await window.confirmationResult.confirm(code);
-    
+    // Inside the onClickHandle2 function
+  const onClickHandle2 = async () => {
+    try {
+      const code = getCodeFromUserInput();
+
+      if (window.confirmationResult) {
+        const result = await window.confirmationResult.confirm(code);
+
+        // Check if user is signed in
+        if (authService.currentUser) {
+          const user = authService.currentUser;
+
           // User signed in successfully.
-          const querySnapshot = await getDocs(query(collection(dbService, 'User'), where('id', '==', phoneNumber)));
+          const querySnapshot = await getDocs(query(collection(dbService, 'User'), where('phoneNumber', '==', phoneNumber)));
           const userExists = querySnapshot.size > 0;
-    
+
           if (!userExists) {
             // If the user doesn't exist, add to Firestore
-            const user = authService.user;
             await addDoc(collection(dbService, 'User'), {
               createrId: user.uid,
               id: phoneNumber,
@@ -69,22 +73,33 @@ const PhoneSignIn = () => {
           }
           navigate('/');
         } else {
-          console.error("Confirmation result is null.");
+          console.error("User is not signed in.");
         }
-      } catch (error) {
-        console.error("Phone number sign-in verification failed:", error.message);
+      } else {
+        console.error("Confirmation result is null.");
       }
-    };
+    } catch (error) {
+      console.error("Phone number sign-in verification failed:", error.message);
+    }
+  };
+
     
 
     return (
       <>
-      <div>
-        <div id="sign-in-button"></div>전화번호 <input onChange={(e) => Setvalue(e.target.value)} type="text" placeholder='01011111111'/>
-        <button onClick={onClickHandle}>문자보내기</button><br/>
-        인증번호 <input onChange={(e) => setVerificationCode(e.target.value)} type="text" value={verificationCode} placeholder='010101'/>
-        <button onClick={onClickHandle2}>인증번호 확인하기</button>
-      </div>
+        <div style={{ textAlign: 'center', alignItems: 'center' }}>
+          <img src={logo} className="logo_img" alt="logo" style={{width: '10%'}} />
+          <p style={{ fontSize: '1.5em', fontWeight: 'bold' }}> 전화번호로 로그인 | 회원가입</p>
+        </div>
+
+        <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+          <div id="sign-in-button"></div>
+          <input onChange={(e) => Setvalue(e.target.value)} type="text" placeholder='전화번호 ex. 01011111111' style={{ width: '10%' }}/>
+          <button onClick={onClickHandle} style={{ backgroundColor:'black', color:'white', border:'gray'}} >문자보내기</button>
+          <br /><br />
+          <input onChange={(e) => setVerificationCode(e.target.value)} type="text" value={verificationCode} placeholder='인증번호 ex. 010101' style={{ width: '10%' }}/>
+          <button onClick={onClickHandle2} style={{ backgroundColor:'black', color:'white', border:'gray'}}>인증번호 확인하기</button>
+        </div>
   </>
    );
 }    

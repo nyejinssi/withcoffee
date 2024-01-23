@@ -130,7 +130,7 @@ const WritePost = () => {
     setLoading(false);
 
     // Redirect or perform any other action after successful submission
-    navigate('/'); // Adjust the path as needed
+    navigate('/community/'); // Adjust the path as needed
   };
 
   const handleImageChange = (e) => {
@@ -139,8 +139,8 @@ const WritePost = () => {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
+    <div style={{ textAlign: 'center' }}>
+    <form onSubmit={handleSubmit} style={{ margin: '0 auto', textAlign:'center' }}>
         <label>
           <select value={category} onChange={(e) => setCategory(e.target.value)}>
             <option value="freedom">자유</option>
@@ -152,11 +152,11 @@ const WritePost = () => {
         </label>
         <br />
         <label>
-          <input type="text" value={title} placeholder={'제목을 입력하세요'} onChange={(e) => setTitle(e.target.value)} />
+          <input type="text" value={title} placeholder={'제목을 입력하세요'} onChange={(e) => setTitle(e.target.value)} style={{ width: '750px', height: '30px' }}/>
         </label>
         <br />
         <label>
-          <textarea value={mainText} placeholder={'내용을 입력하세요'} onChange={(e) => setMainText(e.target.value)} />
+        <textarea value={mainText} placeholder={'내용을 입력하세요'} onChange={(e) => setMainText(e.target.value)} style={{ width: '750px', height: '150px' }} />
         </label>
         <br />
         <label>
@@ -166,14 +166,14 @@ const WritePost = () => {
         {images.map((image, index) => (
           <div key={index}>
             <img src={URL.createObjectURL(image)} alt={`image-${index}`} style={{ maxWidth: '100px', maxHeight: '100px' }} />
-            <button type="button" onClick={() => handleDeleteImage(index, image.name)}>
-              Delete
+            <button type="button" onClick={() => handleDeleteImage(index, image.name)} style={{ backgroundColor:'#ffffff', border: '#ffffff', textAlign:'center'}}>
+              ❌
             </button>
           </div>
         ))}
         <br />
-        <button type="submit" disabled={loading}>
-          {loading ? 'Submitting...' : 'Submit'}
+        <button type="submit" disabled={loading} style={{backgroundColor:'#000000', border: '#000000'}}>
+          {loading ? 'Submitting...' : '글쓰기'}
         </button>
       </form>
     </div>

@@ -35,9 +35,12 @@ export default function Header() {
           <Link to="/mypage" className="user-link">
             마이페이지
           </Link>
+          <Link to="/Auth/logout" className="user-link">
+            로그아웃
+          </Link>
         </div>
         <div className="nav-links">
-          <Link to="/Shop/Shop" className="nav-link">
+          <Link to="/shop/Beans" className="nav-link">
             쇼핑
           </Link>
           <Link to="/Community" className="nav-link">

@@ -15,10 +15,7 @@ const UserInfo = () => {
       const uid = user.uid;
     
       const nickname = event.target.elements.nickname.value;
-      let phoneNumber = event.target.elements.phoneNumber.value;
-    
-      // Remove non-numeric characters from the phone number
-      phoneNumber = phoneNumber.replace(/\D/g, '');
+      let name = event.target.elements.name.value;
     
       // Get a reference to the user document based on the condition
       const usersCollection = collection(dbService, 'User');
@@ -33,7 +30,7 @@ const UserInfo = () => {
           const userDocRef = doc(usersCollection, userDoc.id);
           updateDoc(userDocRef, {
             nickname: nickname,
-            phoneNumber: phoneNumber,
+            name: name,
             // Add other fields as needed
           });
     
@@ -42,25 +39,35 @@ const UserInfo = () => {
         }
       });
     };
+    const containerStyle = {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '80vh', // 화면의 높이에 맞게 조절할 수 있습니다.
+    };
+  
+    const formStyle = {
+      textAlign: 'center',
+      maxWidth: '20%', // 폼의 최대 너비 설정
+      width: '100%',
+    };
 
       return (
-        <div>
-          <form onSubmit={handleSubmit}>
-            <label> 닉네임
-              <input type="text" name="nickname" placeholder='닉네임' required />
-            </label>
-            <br />
-            <label> 이름
-              <input type="text" name="name" placeholder='이름' required />
-            </label>
-            <br />
-            <label> 이메일
-              <input type="text" name="email" placeholder='email' required />
-            </label>
-            <br />
-            <button type="submit">저장</button>
-          </form>
-        </div>
+        <div style={containerStyle}>
+      <form style={formStyle}>
+        <p style={{ fontSize: '1.5em',fontWeight: 'bold'}}>사용자 정보 입력</p>
+        <p> 해당 정보를 입력하지 않을 경우, <br/> 커뮤니티, 쇼핑 등의 활동에 제약이 있을 수 있습니다. </p>
+        <label style={{textAlign:'left'}}> 닉네임
+          <input type="text" name="nickname" placeholder='ex. 커피윗유' required style={{width:'100%'}}/>
+        </label>
+        <br />
+        <label style={{textAlign:'left'}}> 이름
+          <input type="text" name="name" placeholder='홍길동' required style={{width:'100%'}}/>
+        </label>
+        <br />
+        <button type="submit">회원가입하기</button>
+      </form>
+    </div>
       );
         }    
 

@@ -19,6 +19,7 @@ const PostDetail = () => {
   const user = authService.currentUser;
   const createrId = user?.uid; // Add a conditional check
   const commentInputRef = useRef(null);
+  const [dropdownVisible, setDropdownVisible] = useState(false);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -205,35 +206,55 @@ const PostDetail = () => {
       console.error('Error deleting comment:', error);
     }
   };
+  const toggleDropdown = () => {
+    setDropdownVisible(!dropdownVisible);
+  };
+
+  const handleDeleteClick = () => {
+    handleDelete();
+    setDropdownVisible(false);
+  };
+
+  const handleEditClickInDropdown = () => {
+    handleEditClick();
+    setDropdownVisible(false);
+  };
 
 
   return (
-    <div>
+    <div style={{ textAlign: 'center', alignItems: 'center' }}>
       {post ? (
-        <div>
-          <h2>{post.PostTitle}</h2>
-          {post.createrId === createrId && (
-            <button onClick={handleDelete}>삭제</button>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <p style={{ display: 'flex', flexDirection: 'column' }}>
+            <h2>{post.PostTitle}</h2>
+          </p>
+          <div style={{ position: 'relative' }}>
+            <button onClick={toggleDropdown} style={{ backgroundColor: 'white', color: 'black', border: 'gray', width: '3%' }}>⋮</button>
+            {dropdownVisible && (
+              <div style={{ position: 'absolute', top: '100%', right: 0, width: '10%' }}>
+                <button onClick={handleDeleteClick} style={{ backgroundColor: 'white', color: 'black', border: 'gray', width: '100%' }}>삭제</button>
+                <button onClick={handleEditClickInDropdown} style={{ backgroundColor: 'white', color: 'black', border: 'gray', width: '100%' }}>수정</button>
+              </div>
             )}
-            {post.createrId === createrId && (
-            <button onClick={handleEditClick}>수정</button>
-          )}
-          <p> 시간 : {new Date(post.time).toLocaleString()}</p>
-          <p> 작성자 : {post.Writer}</p>
+          </div>
+        </div>
+          <p> {post.Writer} | {new Date(post.time).toLocaleString()}</p>
           <p> {post.PostText}</p>
           {post.PostImgs && post.PostImgs.length > 0 && (
-  <div>
-    {post.PostImgs.map((imageUrl, index) => (
-      <img key={index} src={imageUrl} alt={`postimg-${index}`} />
-    ))}
-  </div>
+          <div>
+            {post.PostImgs.map((imageUrl, index) => (
+              <img key={index} src={imageUrl} alt={`postimg-${index}`} />
+            ))}
+          </div>
 )}
 
-          <p> {post.like}</p>
-          <button onClick={handleLikeClick}> 좋아요 </button>
-          <p> {post.scrap}</p>
-          <button onClick={handleScrapClick}> 저장 </button>
-          <p> 댓글 수: {post.commentid ? post.commentid.length : 0}</p>
+          <p> ❤️{post.like}  |  ✅{post.scrap}  |  💬{post.commentid ? post.commentid.length : 0} </p>
+          <p>
+            <button onClick={handleLikeClick} style={{ backgroundColor:'#ffffff', color:'black', border: '#ffffff', }}> ❤️ 좋아요 </button>
+            <button onClick={handleScrapClick} style={{ backgroundColor:'#ffffff', color:'black' ,border: '#ffffff', }}> ✅ 저장 </button>
+          </p>
+          
           <ul>
             {comments.map((comment) => (
               <li key={comment.id}>
@@ -245,14 +266,14 @@ const PostDetail = () => {
               </li>
             ))}
           </ul>
-          <form onSubmit={handleCommentSubmit}>
+          <form onSubmit={handleCommentSubmit} style={{ textAlign: 'center', marginTop: '10px', margin: 'auto', width: '50%' }}>
             <textarea
               ref={commentInputRef}
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
               placeholder="댓글을 적어주세요!"
             />
-            <button type="submit">저장</button>
+            <button type="submit" style={{ backgroundColor:'black', color:'white', border:'gray'}} >저장</button>
           </form>
         </div>
       ) : (
@@ -261,5 +282,6 @@ const PostDetail = () => {
     </div>
   );
 };
+
 
 export default PostDetail;
