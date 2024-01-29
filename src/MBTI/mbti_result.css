@@ -1,31 +1,29 @@
 #mbti_result{
     display: none;
-    width:100%;
+    max-width:80%
+}
+
+#resultImage{
+    height: 100px;
+    width:100px;
 }
 
 .resultDesc{
     font-size: 1rem;
     font-weight: 800;
     margin-top: 25%;
-    width:80%;
-    height: 20%;
     border-radius: 17px;
     padding-left: 5%;
- 
     text-align: start;
-
-    width:50%;
+    color:white;
 }
 
 .resultFlavor{
     font-size: 1rem;
     font-weight: 800;
     box-sizing: border-box;
-    width:40%;
     border-radius: 17px;
-    
     padding-right: 5%;
     text-align: end;
-
-
+    color:white;
 }

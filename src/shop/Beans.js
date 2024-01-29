@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { dbService } from '../fbase';
 import { Link, useLocation } from 'react-router-dom';
 import { collection, getDocs, query, where } from 'firebase/firestore';
+import shop from './shop.css';
 
 const Beans = () => {
 
@@ -15,6 +16,8 @@ const Beans = () => {
   const [sortOrder, setSortOrder] = useState(''); // 정렬 필터
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
   const [itemsPerPage, setItemsPerPage] = useState(20); //페이지당 상품 갯수
+
+  const [isTextBlack, setIsTextBlack] = useState(true); //텍스트 색상 변경
 
   const brands = ['스타벅스', '맥심', '폴바셋', '테라로사', '카누', '일리', '블루보틀', '라바짜'];
   const priceRanges = [
@@ -207,36 +210,25 @@ const handleSortOrder = (value) => {
 
 
   return (
-    <div className="Beans">
-      <button disabled>
-        원두
-      </button>
-      <button>
-      <Link to="/shop/Tools">
-        <button>도구</button>
-      </Link>
-      </button>
-    {/* 페이지당 아이템 수 선택 UI */}
-      <label>
-        페이지당 아이템 수:
-        <select value={itemsPerPage} onChange={handleItemsPerPageChange}>
-          <option value={10}>10</option>
-          <option value={20}>20</option>
-          <option value={30}>30</option>
-        </select>
-      </label>
+    // <div>검색 결과 출력</div>
+    <div className="shop-container">
+      <nav className="shop-nav">
+        <li style={{color:'white', backgroundColor:'black'}}>원두</li>
+        <li><Link to="/shop/Tools">도구</Link></li>
+      </nav>
 
-        <div>
-        <label>카테고리</label>
-        <label>
-          <input
-            type="checkbox"
-            value="0"
-            checked={typeFilter === '0'}
-            onChange={() =>  handleTypeFilter('0')}
-          />
-          로스팅 홀빈
-        </label>
+      <div className="filter-container">
+        <div className="filter-group">
+          <p>타입</p>
+          <label>
+            <input
+              type="checkbox"
+              value="0"
+              checked={typeFilter === '0'}
+              onChange={() => handleTypeFilter('0')}
+            />
+            로스팅 홀빈
+          </label>
         <label>
           <input
             type="checkbox"
@@ -257,8 +249,8 @@ const handleSortOrder = (value) => {
         </label>
       </div>
 
-      <div>
-        <label>브랜드</label>
+      <div className="filter-group">
+        <p>브랜드</p>
         {brands.map(brand => (
           <label key={brand}>
             <input
@@ -272,9 +264,8 @@ const handleSortOrder = (value) => {
         ))}
       </div>
 
-      {/* 카페인 필터 */}
-      <div>
-        <label>카페인 유무</label>
+      <div className="filter-group">
+        <p>카페인 유무</p>
         <label>
           <input
             type="checkbox"
@@ -295,9 +286,8 @@ const handleSortOrder = (value) => {
         </label>
       </div>
 
-    {/* 가격대 필터 */}
-    <div>
-      <label>가격대</label>
+    <div className="filter-group">
+      <p>가격대</p>
       {priceRanges.map((range, index) => (
         <label key={index}>
           <input
@@ -312,8 +302,8 @@ const handleSortOrder = (value) => {
     </div>
 
       {/* 별점 필터 */}
-      <div>
-        <label>별점</label>
+      <div className="filter-group">
+        <p>별점</p>
         <label>
           <input
             type="checkbox"
@@ -351,10 +341,9 @@ const handleSortOrder = (value) => {
           4점 이상
         </label>
       </div>
-
-          {/* 정렬 기준 필터 */}
-    <div>
-      <label>정렬 기준</label>
+      </div>
+    <div className="sort-group">
+      <p>정렬 기준</p>
       <label>
         <input
           type="checkbox"
@@ -394,27 +383,19 @@ const handleSortOrder = (value) => {
     </div>
 
        {/* 상품 목록 렌더링 */}
-      <ul>
+      <ul className="products-list">
         {getCurrentProducts().map(product => (
-          <li key={product.id}>
-            <p>카테고리: {getTypeString(product.type)}</p>
-            <p>브랜드: {product.brand}</p>
-            <p>제품명: 
-            <Link to={`/shop/Detail/${product.id}`}>
-              {product.name}
-            </Link>
-            </p>
-            <p>카페인 여부: {getCaffeineInfo(product.caffeine)}</p>
-            <p>가격: {formatPrice(product.price)}</p>
-            <p>인터넷 별점: {product.rate}</p>
-            {product.image && <img src={product.image} alt="Product" style={{ width: '100px', height: '100px' }} />}
+          <li className="products-list-item" key={product.id}>
+            <h3><Link to={`/shop/Detail/${product.id}`}>{product.name}</Link></h3>
+            <p className="products-metadata"> 카테고리: {getTypeString(product.type)} | 브랜드: {product.brand} | 카페인 여부: {getCaffeineInfo(product.caffeine)} | 가격: {formatPrice(product.price)} | 인터넷 별점: {product.rate}</p>
+            <Link to={`/shop/Detail/${product.id}`}>{product.image && <img src={product.image} alt="Product" style={{ width: '100px', height: '100px' }} />}</Link>
           </li>
         ))}
       </ul>
             {/* 페이지 넘기기 버튼 */}
       <div>
         {generatePageNumbers().map(pageNumber => (
-          <button key={pageNumber} onClick={() => setCurrentPage(pageNumber)} disabled={currentPage === pageNumber}>
+          <button className='product-list-next-button' key={pageNumber} onClick={() => setCurrentPage(pageNumber)} disabled={currentPage === pageNumber}>
             {pageNumber}
           </button>
         ))}

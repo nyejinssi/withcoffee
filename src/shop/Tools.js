@@ -3,6 +3,7 @@ import { dbService } from '../fbase';
 import { Link, Route, useLocation } from 'react-router-dom';
 import ProductDetail from './Detail';
 import { collection, getDocs, query, where } from 'firebase/firestore';
+import shop from './shop.css';
 
 const Tools= () => { 
   const [products, setProducts] = useState([]); // 전체 상품 리스트
@@ -176,43 +177,30 @@ const handleSortOrder = (value) => {
 
 
   return (
-    <div className="Tools">
-      <button>
-      <Link to="/shop/Beans">
-        <button>원두</button>
-      </Link>
-      </button>
-      <button disabled>
-        도구
-      </button>
+    <div className="shop-container">
+      <nav className="shop-nav">
+        <li><Link to="/shop/Beans">원두</Link></li>
+        <li style={{color:'white', backgroundColor:'black'}}>도구</li>
+      </nav>
 
-    {/* 페이지당 아이템 수 선택 UI */}
-      <label>
-        페이지당 아이템 수:
-        <select value={itemsPerPage} onChange={handleItemsPerPageChange}>
-          <option value={10}>10</option>
-          <option value={20}>20</option>
-          <option value={30}>30</option>
-        </select>
-      </label>
-
-      <div>
-        <label>카테고리</label>
-        {types.map((type) => (
-          <label key={type}>
-            <input
-              type="checkbox"
-              value={type}
-              checked={selectedTypes.includes(type)}
-              onChange={() => handleTypeFilter(type)}
-            />
-            {type}
-          </label>
+      <div className="filter-container">
+        <div className="filter-group">
+          <p>타입</p>
+          {types.map((type) => (
+            <label key={type}>
+              <input
+                type="checkbox"
+                value={type}
+                checked={selectedTypes.includes(type)}
+                onChange={() => handleTypeFilter(type)}
+              />
+              {type}
+            </label>
         ))}
       </div>
 
-      <div>
-        <label>브랜드</label>
+      <div className="filter-group">
+        <p>브랜드</p>
         {brands.map(brand => (
           <label key={brand}>
             <input
@@ -226,9 +214,8 @@ const handleSortOrder = (value) => {
         ))}
       </div>
 
-      {/* 가격대 필터 */}
-    <div>
-      <label>가격대</label>
+    <div className="filter-group">
+      <p>가격대</p>
       {priceRanges.map((range, index) => (
         <label key={index}>
           <input
@@ -242,8 +229,8 @@ const handleSortOrder = (value) => {
       ))}
     </div>
 
-      <div>
-        <label>별점</label>
+      <div className="filter-group">
+      <p>별점</p>
         <label>
           <input
             type="checkbox"
@@ -282,59 +269,55 @@ const handleSortOrder = (value) => {
         </label>
       </div>
 
-    <div>
-      <label>정렬 기준</label>
-      <label>
-        <input
-          type="checkbox"
-          value="popularity"
-          checked={sortOrder === 'popularity'}
-          onChange={() => handleSortOrder('popularity')}
-        />
-        인기순
-      </label>
-      <label>
-        <input
-          type="checkbox"
-          value="priceHigh"
-          checked={sortOrder === 'priceHigh'}
-          onChange={() => handleSortOrder('priceHigh')}
-        />
-        가격 높은 순
-      </label>
-      <label>
-        <input
-          type="checkbox"
-          value="priceLow"
-          checked={sortOrder === 'priceLow'}
-          onChange={() => handleSortOrder('priceLow')}
-        />
-        가격 낮은 순
-      </label>
-      <label>
-        <input
-          type="checkbox"
-          value="ratingHigh"
-          checked={sortOrder === 'ratingHigh'}
-          onChange={() => handleSortOrder('ratingHigh')}
-        />
-        별점 높은 순
-      </label>
+
+      <div className="sort-group">
+        <p style={{ marginLeft:40 }}>정렬 기준</p>
+        <label>
+          <input
+            type="checkbox"
+            value="popularity"
+            checked={sortOrder === 'popularity'}
+            onChange={() => handleSortOrder('popularity')}
+          />
+          인기순
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            value="priceHigh"
+            checked={sortOrder === 'priceHigh'}
+            onChange={() => handleSortOrder('priceHigh')}
+          />
+          가격 높은 순
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            value="priceLow"
+            checked={sortOrder === 'priceLow'}
+            onChange={() => handleSortOrder('priceLow')}
+          />
+          가격 낮은 순
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            value="ratingHigh"
+            checked={sortOrder === 'ratingHigh'}
+            onChange={() => handleSortOrder('ratingHigh')}
+          />
+          인터넷 별점 높은 순
+        </label>
+      </div>
     </div>
 
        {/* 상품 목록 렌더링 */}
-      <ul>
+      <ul className="products-list">
         {getCurrentProducts().map(product => (
-          <li key={product.id}>
-            <p>카테고리: {product.type}</p>
-            <p>브랜드: {product.brand}</p>
-            <p>제품명: </p>
-            <Link to={`/shop/Detail/${product.id}`}>
-              {product.name}
-            </Link>
-            <p>가격: {formatPrice(product.price)}</p>
-            <p>별점: {product.rate}</p>
-            {product.image && <img src={product.image} alt="Product" style={{ width: '100px', height: '100px' }} />}
+          <li className="products-list-item" key={product.id}>
+             <h3><Link to={`/shop/Detail/${product.id}`}>{product.name}</Link></h3>
+             <p className="products-metadata"> 카테고리: {product.type} | 브랜드: {product.brand} | 가격: {formatPrice(product.price)} | 인터넷 별점: {product.rate}</p>
+            <Link to={`/shop/Detail/${product.id}`}>{product.image && <img src={product.image} alt="Product" style={{ width: '100px', height: '100px' }} />}</Link>
           </li>
         ))}
       </ul>
@@ -342,7 +325,7 @@ const handleSortOrder = (value) => {
     {/* 페이지 넘기기 버튼 */}
       <div>
         {generatePageNumbers().map(pageNumber => (
-          <button key={pageNumber} onClick={() => setCurrentPage(pageNumber)} disabled={currentPage === pageNumber}>
+          <button className='product-list-next-button' key={pageNumber} onClick={() => setCurrentPage(pageNumber)} disabled={currentPage === pageNumber}>
             {pageNumber}
           </button>
         ))}

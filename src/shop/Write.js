@@ -56,7 +56,9 @@ const Write = () => {
             creatorId: user.uid,
             reviewimage: attachment,
             ProductID: productId,
-            userrate: selectedScore, // Include the selected score in the database entry
+            name:selectedProduct.name,
+            image:selectedProduct.image,
+            userrate: selectedScore, 
           });
             setUserreview("");
             console.log("Document written with ID: ", docRef.id);
@@ -126,16 +128,16 @@ const Write = () => {
                 key={index}
                 size="20"
                 onMouseEnter={() => starScore(index)}
-                onMouseLeave={resetStars}              
+                onClickCapture={resetStars}              
                 color={index < selectedScore ? 'gold' : 'lightGray'}
               ></FaStar>
             ))}
               <input type = "file" accept = "image/*" onChange={onFileChange}/>
-              <input type = "submit" value = "저장"/>
+              <input type = "submit" value = "저장" style={{backgroundColor: 'black', color: 'White', padding: '10px', border: 'none', borderRadius: '4px', cursor: 'pointer' }}/>
               {attachment && (
                   <div>
                       <img src = {attachment} width = "100px" height = "80px" />
-                      <button  className="btn btn-primary" id="deleteReview" onClick = {onClearAttachment}>X</button>
+                      <button className="PhotoDelete" id="deleteReview" onClick = {onClearAttachment}>X</button>
                   </div>
                   )}
           </form>

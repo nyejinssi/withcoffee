@@ -1,23 +1,24 @@
-import React, { useState } from 'react';
-import Link from 'react-dom/client';
-import {qnaList, infoList} from './MBTIdata';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';  // Import useNavigate
+import { qnaList, infoList } from './MBTIdata';
 import './qna.css';
 import './mbti_result.css';
 
 const MBTItest = () => {
   const [qIdx, setQIdx] = useState(0);
   const [mbtiSelect, setMbtiSelect] = useState([...Array(27)].map(() => 0));
+  const navigate = useNavigate();
 
   const calResult = () => {
     var resultArray = mbtiSelect.indexOf(Math.max(...mbtiSelect));
     return resultArray;
-}
+  };
 
   const setResult = () => {
     const point = calResult();
     const resultName = document.querySelector('.resultName');
     resultName.innerHTML = infoList[point]?.name || '';
-  
+
     const resultImg = document.createElement('img');
     const imgDiv = document.querySelector('#resultImage');
     const imgURL = require(`./img/image-${point}.jpg`);
@@ -25,14 +26,13 @@ const MBTItest = () => {
     resultImg.alt = point;
     resultImg.classList.add('img-fluid');
     imgDiv.appendChild(resultImg);
-  
+
     const resultFlavor = document.querySelector('.resultFlavor');
     resultFlavor.innerHTML = infoList[point]?.flavor?.join('<br/>') || '';
-  
+
     const resultDesc = document.querySelector('.resultDesc');
     resultDesc.innerHTML = infoList[point]?.desc?.join('<br/>') || '';
   };
-  
 
   const goResult = () => {
     const mbtiQna = document.querySelector('#mbti_qna');
@@ -67,7 +67,7 @@ const MBTItest = () => {
 
     const qnaURL = './img/question/';
     const leftMbtiURL = require(`./img/question/${idx}-A.png`);
-    const rightMbtiURL = require(`./img/question/${idx}-B.png`);    
+    const rightMbtiURL = require(`./img/question/${idx}-B.png`);
 
     const leftMbtiImage = document.querySelector('.leftMbtiImage');
     const rightMbtiImage = document.querySelector('.rightMbtiImage');
@@ -104,14 +104,13 @@ const MBTItest = () => {
       if (qIdx + 1 === qnaList.length) {
         goResult();
         return;
-      }
-      else {
+      } else {
         setTimeout(() => {
           const target = qnaList[qIdx].a[idx].type;
-          for(let i = 0; i < target.length; i++){
+          for (let i = 0; i < target.length; i++) {
             mbtiSelect[target[i]] += 1;
-            } //select에 answer 받은 값 넣기. ex) select[0] = espresso(1번째 버튼)
-  
+          }
+
           leftMbtiImage.style.display = 'none';
           rightMbtiImage.style.display = 'none';
           goNext(qIdx + 1);
@@ -137,50 +136,41 @@ const MBTItest = () => {
     }, 450);
   };
 
+  // 컴포넌트가 마운트되면 자동으로 시작
+  useEffect(() => {
+    begin();
+  }, []);
+
   return (
     <>
-      <div className="container pb-5 mx-auto" style={{marginTop:"15%"}}>
+      <div className="container pb-5 mx-auto" style={{ marginTop: '15%', backgroundColor:'black'}}>
         <section id="mbti_main" className="mx-auto">
-          <h3 className="p-5">'내가 좋아하는 원두'를 잘 모르겠는 당신!</h3>
-          <h3 className="pt-2 pb-5" style={{ textAlign: 'end' }}>
-            그리고 새로운 원두를 도전해보고 싶은 당신!
-          </h3>
-          <br/>
-          <h3 className="pb-5" style={{ textAlign: 'center' }}>
-            '나의 커피 취향'이 궁금한 당신을 위한
-          </h3>
-          
-          <h1 >커피 MBTI</h1>
-          <button
-            type="button"
-            className="btn btn-secondary btn-lg"
-            onClick={begin}
-          >
-            시작하기
-          </button>
+          <div>문제를 로딩중입니다 . . .</div>
         </section>
         <section id="mbti_qna">
           <div className="status mx-auto mt-8">
             <div className="statusBar" />
           </div>
-          <div className="qBox my-5 py-3 mx-auto"  />
-          <div className="answerBox mx-auto">
-            <div className="row row-cols-1 row-cols-md-2 g-2">
-              <div className="col">
+          <div className="qBox my-5 py-3 mx-auto" style={{ marginTop: '5%' }}/>
+          <div className="answerBox mx-auto" style={{ display: 'flex', justifyContent: 'center' }}>
+            <div className="row" style={{ display: 'flex', justifyContent: 'center' }}>
+              <div className="col" style={{ margin: '10px' }}>
                 <div className="card">
                   <img
                     src="./img/question/0-A.png"
                     className="card-img-top leftMbtiImage"
                     alt="..."
+                    style={{ maxWidth: '100%', height: 'auto', border:'1px solid white' }}
                   />
                 </div>
               </div>
-              <div className="col">
+              <div className="col" style={{ margin: '10px' }}>
                 <div className="card">
                   <img
                     src="./img/question/0-B.png"
                     className="card-img-top rightMbtiImage"
                     alt="..."
+                    style={{ maxWidth: '100%', height: 'auto', border:'1px solid white'}}
                   />
                 </div>
               </div>
@@ -188,35 +178,27 @@ const MBTItest = () => {
           </div>
         </section>
         <section id="mbti_result">
-          <div
-          >
-            당신의 커피 취향
-          </div>
-          <div
-            className="resultName"
-            
-          ></div>
+          <div>당신의 커피 취향</div>
+          <div className="resultName" style={{color:'white'}}></div>
           <div
             id="resultImage"
-            className="col-3 mx auto"
             style={{ float: 'right'}}
           ></div>
           <div
             className="resultFlavor"
-            style={{ float: 'left', width: 515, marginBottom: 50 }}
+            style={{ float: 'left', marginBottom: 50, color:'white' }}
           ></div>
           <div
             className="resultDesc"
-            style={{
-            }}
+            style={{color:'white'}}
           ></div>
-          <button type="button" className="btn btn-secondary btn-lg buyMBTI" >
-            구매하러 가기
-          </button>
+          <Link to={infoList[calResult()]?.link || '/default-link'}>
+            <button style={{ marginTop: '20px' }}>구매하러 가기</button>
+          </Link>
         </section>
       </div>
     </>
   );
-}
+};
 
 export default MBTItest;

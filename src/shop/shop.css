@@ -1,0 +1,183 @@
+.shop-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .shop-nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .shop-nav li {
+    display: inline;
+    margin-right: 15px;
+  }
+  
+  .shop-nav a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    padding: 8px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+  }
+  
+  .shop-nav a:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .product-list-next-button {
+    background-color: #000000;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+  
+  .product-list-next-button:hover {
+    background-color: #4a4a4a;
+  }
+  
+  .products-container {
+    margin-top: 20px;
+  }
+  
+  .products-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .products-list-item {
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+  }
+  
+  .products-list-item a {
+    text-decoration: none;
+    color: #333;
+  }
+  
+  .products-list-item h3 {
+    margin: 0;
+    font-size: 1.2em;
+  }
+  
+  .products-metadata {
+    color: #555;
+    font-size: 0.8em;
+  }
+  
+  .products-metadata p {
+    margin: 5px 0;
+  }
+
+  .filter-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 80%;
+    margin-bottom: 5%;
+  }
+  
+  .filter-group label {
+    display: block;
+    position: relative;
+    padding-left: 40px;
+    cursor: pointer;
+    margin-bottom: 10px;
+  }
+  
+  .filter-group p{
+    display: block;
+    padding-left: 40px;
+    font-weight: bold;
+    margin:0;
+  }
+
+  .sort-group p{
+    display: block;
+    padding-left: 40px;
+    font-weight: bold;
+    }
+
+  
+  .filter-group input[type="checkbox"], .sort-group input[type="checkbox"] {
+    display: none;
+  }
+  
+  .sort-group {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom:  4rem;
+    align-items: flex-end;
+  }
+  
+  .sort-group label {
+    display: block;
+    position: relative;
+    padding-left: 40px;
+    cursor: pointer;
+    flex: 1;
+    white-space: nowrap;
+    margin-bottom: 10px;
+  }
+
+  #detail-container, #detail-container p{
+    display: flex; flex-direction: column; align-items: center;
+  }
+
+  #detail-container h2{
+    display: flex; flex-direction: column; margin: 0.75rem;
+  }
+
+  #button-container {
+    display: flex;
+    flex-direction: row; /* Make the buttons horizontal */
+    margin-top: 1rem; /* Add some spacing between the content and buttons */
+  }
+
+  .detail-rating{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .detail-rating .star {
+    margin-right: 3px; /* Adjust as needed to add space between stars */
+  }
+  
+  #detail-container button{
+    margin-right: 1rem;
+    background-color: rgb(255, 255, 255); color: black; border: rgb(255, 255, 255);
+  }
+
+  .detail-review{
+    margin-bottom: 5%;
+  }
+
+  .detail-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* Ensure that the container takes up the full height of its parent */
+  }
+  
+  .detail-image {
+    width: 75px;
+    height: 75px;
+  }

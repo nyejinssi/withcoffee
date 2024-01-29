@@ -25,7 +25,6 @@ const UserInfo = () => {
       }
     };
     
-
     const handleSubmit = async (event) => {
       event.preventDefault();
       const user = authService.currentUser;

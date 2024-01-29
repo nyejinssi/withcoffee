@@ -1,16 +1,18 @@
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link , useLocation, useNavigate} from 'react-router-dom';
+import { authService, dbService } from '../fbase';
 import logo from './HeaderLogo.png';
-import { React, useState } from 'react';
 import './header.css'; // Import the CSS file
 import SearchIcon from './검색.png';
 
 export default function Header() {
   const [searchInput, setSearchInput] = useState('');
+  const navigate = useNavigate();
 
   const handleSearch = (e) => {
     e.preventDefault();
-    // 검색 로직 추가
-    console.log('검색어:', searchInput);
+    navigate(`/shop/Search/${searchInput}`);
+    setSearchInput('');
   };
 
   return (

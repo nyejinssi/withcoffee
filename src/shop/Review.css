@@ -262,3 +262,13 @@ text-decoration: none;
 .button-wrapper button {
   margin-left: 5px;
 }
+
+.PhotoDelete{
+  background-color: #000000;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 20px;
+}
