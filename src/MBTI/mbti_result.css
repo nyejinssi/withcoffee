@@ -1,19 +1,27 @@
 #mbti_result{
-    display: none;
-    max-width:80%
+    display: flex;
+    text-align: 'center';
 }
 
 #resultImage{
-    height: 100px;
-    width:100px;
+    height: 30%;
+    width:30%
+}
+
+.mbtiBuyButton{
+    background-color: #000000;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+    border: 1px solid white;
 }
 
 .resultDesc{
     font-size: 1rem;
     font-weight: 800;
-    margin-top: 25%;
     border-radius: 17px;
-    padding-left: 5%;
     text-align: start;
     color:white;
 }
