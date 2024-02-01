@@ -3,8 +3,8 @@ import { authService } from '../fbase';
 
 const Logout = () => {
     const navigate = useNavigate();
-      authService.signOut();
-      navigate('/');
-    };
+    authService.signOut();
+    navigate('/');
+};
 
 export default Logout;

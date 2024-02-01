@@ -19,15 +19,22 @@ import Post from './community/Post';
 import PostDetail from './community/PostDetail';
 import PopularPosts from './community/PopularPosts';
 import Edit from './community/Edit';
-
 //-------------MyPage-------------
 import Home from './MyPage/Home';
 import MyComment from './MyPage/MyComment';
 import SavedPost from './MyPage/SavedPost';
 import UpdateInfo from './MyPage/UpdateInfo';
+import LikedProduct from './MyPage/LikedProduct';
+import MyReview from './MyPage/MyReview';
 //------- MBTI------------------------
 import MBTItest from './MBTI/MBTItest';
 import MBTIdata from './MBTI/MBTIdata';
+//-----------------Shop-------------------
+import Beans from './shop/Beans';
+import Tools from './shop/Tools';
+import Detail from './shop/Detail';
+import WriteReview from './shop/Write';
+import Search from './shop/Search';
 
 const App = () => {
   const [init, setInit] = useState(false); // init = false
@@ -69,7 +76,11 @@ const App = () => {
               <Route path="/mypage/MyComment/*" element={<MyComment/>} />
               <Route path="/mypage/SavedPost/*" element={<SavedPost/>} />
               <Route path="/mypage/UpdateInfo/*" element={<UpdateInfo/>} />
-              <Route path="/Edit/:postId" element={<Edit />} />
+              <Route path="/Edit/:postId" element={<Edit />}/>
+              <Route path="/mypage/LikedProduct/*" element={<LikedProduct/>}/>
+              <Route path="/mypage/MyReview/*" element={<MyReview/>}/>
+
+              <Route path="/Review/Write/:productId" element={<WriteReview/>}/>
             </>
           ):(
             <>
@@ -79,6 +90,11 @@ const App = () => {
           <Route path="/" element={<Main />} />
           <Route path="/MBTI/MBTItest/*" element={<MBTItest/>} />
           <Route path="/Auth/PhoneSignIn" element={<PhoneSignIn/>} />
+
+          <Route path="/shop/Beans" element={<Beans/>}/>
+          <Route path="/shop/Tools" element={<Tools/>}/>
+          <Route path="/shop/Detail/:productId"  element={<Detail/>}/>
+          <Route path="/shop/Search/:searchQuery" element={<Search />} />
         </Routes>
       </BrowserRouter>
     </div>

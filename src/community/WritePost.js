@@ -92,7 +92,7 @@ const WritePost = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (title.length < 10 || mainText.length < 10) {
+    if (title.length < 5 || mainText.length < 5) {
       alert('제목이나 내용이 너무 짧습니다 :(');
       return;
     }

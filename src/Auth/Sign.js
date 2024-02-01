@@ -4,7 +4,7 @@ import { getAuth, GoogleAuthProvider, signInWithPopup , createUserWithEmailAndPa
   RecaptchaVerifier, signInWithPhoneNumber
 } from "firebase/auth";
 
-import { getFirestore, addDoc, getDocs, collection, query, onSnapshot, orderBy, serverTimestamp } from "firebase/firestore";
+import { doc, getDoc,getFirestore, addDoc, getDocs, collection, query, onSnapshot, orderBy, serverTimestamp } from "firebase/firestore";
 import { useNavigate, Link } from 'react-router-dom';
 import logo from '../header/HeaderLogo.png';
 import GoogleLogin from './btn_google_signin_light_normal_web.png';
@@ -56,26 +56,35 @@ const Sign = () => {
   };
 
   const onSocialClick = async (event) => {
-      const { target: {name},} = event;
-      let provider;
-      if (name === "google"){ 
-          provider = new GoogleAuthProvider(); 
-      } 
-      try {
-          const { user } = await signInWithPopup(authService, provider);
-          console.log("구글로 회원가입 하기를 선택하셨습니다.");
+    const { target: {name}, } = event;
+    let provider;
+    if (name === "google"){ 
+        provider = new GoogleAuthProvider(); 
+    } 
+    try {
+        const { user } = await signInWithPopup(authService, provider);
+        console.log("구글로 회원가입 하기를 선택하셨습니다.");
+  
+        // Check if the user is already registered
+        const userDocRef = doc(dbService, 'User', user.uid);
+        const userDocSnapshot = await getDoc(userDocRef);
+  
+        if (!userDocSnapshot.exists()) {
+          // User is not registered, proceed with registration
           await addDoc(collection(dbService, 'User'), {
-              createdAt: serverTimestamp(), // Timestamp of the sign-up
+              createdAt: serverTimestamp(),
               createrId: user.uid,
               name: user.displayName,
               email: user.email          
-            // Add other fields as needed
+              // Add other fields as needed
           });
-          navigate('/Auth/Info/Email');
-        } catch (error) {
-          console.error('Error signing in with social provider:', error);
         }
-      };
+  
+        navigate('/');
+    } catch (error) {
+        console.error('Error signing in with social provider:', error);
+    }
+  };
 
   const toggleAccount = () => setNewAccount((prev) => !prev);
   const PhoneClick = () => {

@@ -28,24 +28,23 @@ const CommunityHome = () => {
 
   return (
     <div className="community-container">
-      <nav className="community-nav">
-        <ul>
-          <li><Link to="/community/popular">인기</Link></li>
-          <li><Link to="/community/freedom" onClick={() => handleCategoryClick('freedom')}>자유</Link></li>
-          <li><Link to="/community/coffeeBean" onClick={() => handleCategoryClick('coffeeBean')}>원두</Link></li>
-          <li><Link to="/community/tools" onClick={() => handleCategoryClick('tools')}>도구</Link></li>
-          <li><Link to="/community/startup" onClick={() => handleCategoryClick('startup')}>창업</Link></li>
-          <li><Link to="/community/promotion" onClick={() => handleCategoryClick('promotion')}>홍보</Link></li>
-        </ul>
-      </nav>
-
-      {category === 'popular' ? (
-        <PopularPosts />
-      ) : (
-        <Post category={category} />
-      )}
-      <button className="community-button" onClick={handleWritePostClick}>글쓰기</button>
-    </div>
+    <nav className="community-nav" style={{ backgroundColor: 'black' }}>
+      <ul>
+        <li><Link to="/community/popular">인기</Link></li>
+        <li><Link to="/community/freedom" onClick={() => handleCategoryClick('freedom')}>자유</Link></li>
+        <li><Link to="/community/coffeeBean" onClick={() => handleCategoryClick('coffeeBean')}>원두</Link></li>
+        <li><Link to="/community/tools" onClick={() => handleCategoryClick('tools')}>도구</Link></li>
+        <li><Link to="/community/startup" onClick={() => handleCategoryClick('startup')}>창업</Link></li>
+        <li><Link to="/community/promotion" onClick={() => handleCategoryClick('promotion')}>홍보</Link></li>
+      </ul>
+    </nav>
+    {category === 'popular' ? (
+      <PopularPosts />
+    ) : (
+      <Post category={category} />
+    )}
+    <button className="community-button" onClick={handleWritePostClick}>글쓰기</button>
+  </div>
   );
 };
 

@@ -2,33 +2,13 @@
     display:none;
 }
 
-.answerBox{
-    width:80%;
-}
 .qBox{ /*질문 박스*/
     text-align:center;
     border-radius: 20px;
     font-size:30px;
-    width:100%
+    color:white;
 }
-
-/*.answerList{ 버튼
-    background-color: wheat;
-    border-radius: 20px;
-    display: block;
-    width: 80%; /*폭을 바디기준 80%
-    border:0px;
-    font-size: 20px;
-    
-} 
 
 .answerList:hover, .answerList:focus{
     background-color:azure;
-}*/
-
-.status{
-    height: 20px;
-    width: 100%;
-    border-radius: 20px;
 }
-

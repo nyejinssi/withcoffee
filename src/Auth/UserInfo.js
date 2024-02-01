@@ -10,7 +10,6 @@ const UserInfo = () => {
     const [nickname, setNickname] = useState("");
     const [name, setName] = useState("");
     const [phoneNumber, SetPhoneNumber] = useState("");
-    console.log('ho');
     
     const onChange = (event) => {
       const { target: { name, value } } = event;
@@ -26,10 +25,8 @@ const UserInfo = () => {
       }
     };
     
-
     const handleSubmit = async (event) => {
       event.preventDefault();
-      console.log("hello")
       const user = authService.currentUser;
       const uid = user.uid;
       
@@ -56,27 +53,42 @@ const UserInfo = () => {
       });
     };
 
-  return (
-    <div style={{ alignItems: 'center', height: '80vh', textAlign:'center'}}>
-      <p style={{ fontSize: '1.5em',fontWeight: 'bold'}}>사용자 정보 입력</p>
-        <p> 해당 정보를 입력하지 않을 경우, <br/> 커뮤니티, 쇼핑 등의 활동에 제약이 있을 수 있습니다. </p>
-      <form style={{textAlign:'center', maxWidth: '20%', width: '100%', alignItems: 'center'}}>        
-        <label style={{textAlign:'left'}}>
-        닉네임 <input type="text" name="nickname" placeholder='ex. 커피윗유' required style={{width:'100%'}} onChange={onChange} />
-        </label>
-        <br />
-        <label style={{textAlign:'left'}}> 전화번호
-          <input type="text" name="phoneNumber" placeholder='01011111111' required style={{width:'100%'}} onChange={onChange} />
-        </label>
-        <br />
-        <label style={{textAlign:'left'}}> 이름
-          <input type="text" name="name" placeholder='홍길동' required style={{width:'100%'}} onChange={onChange} />
-        </label>
-        <br />
-        <button type="submit" onClick={handleSubmit} style={{ backgroundColor:'black', color:'white', border:'gray'}}>회원가입하기</button>
-      </form>
-    </div>
-      );
-        }    
+    const containerStyle = {
+      display: 'flex',
+      flexDirection: 'column',  // Set the flex direction to column
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '80vh',
+    };
+    
+    const formStyle = {
+      textAlign: 'center',
+      maxWidth: '20%',
+      width: '100%',
+    };
+    
+    return (
+      <div style={containerStyle}>
+        <div style={{ marginBottom: '20px' }}> {/* Add a margin bottom to create space between text and form */}
+          <p style={{ fontSize: '1.5em', fontWeight: 'bold', textAlign:'center' }}>사용자 정보 입력</p>
+          <p style={{textAlign:'center'}}> 해당 정보를 입력하지 않을 경우, <br /> 커뮤니티, 쇼핑 등의 활동에 제약이 있을 수 있습니다. </p>
+        </div>
+        <form style={formStyle} onSubmit={handleSubmit}>
+          <label style={{ textAlign: 'left' }}>
+            닉네임 <input type="text" name="nickname" placeholder='ex. 커피윗유' required style={{ width: '100%' }} onChange={onChange} />
+          </label>
+          <br />
+          <label style={{ textAlign: 'left' }}> 전화번호
+            <input type="text" name="phoneNumber" placeholder='01011111111' required style={{ width: '100%' }} onChange={onChange} />
+          </label>
+          <br />
+          <label style={{ textAlign: 'left' }}> 이름
+            <input type="text" name="name" placeholder='홍길동' required style={{ width: '100%' }} onChange={onChange} />
+          </label>
+          <br />
+          <button type="submit" style={{ backgroundColor: 'black', color: 'white', border: 'gray' }}>회원가입하기</button>
+        </form>
+      </div>
+    ); };     
 
 export default UserInfo; 
