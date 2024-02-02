@@ -7,7 +7,8 @@ import users from './users.png';
 import {
   addDoc,
   setDoc,
-  getDocs,
+  getDoc,
+  updateDoc,
   doc,
   collection,
   query,
@@ -25,26 +26,39 @@ export default function Header() {
 
   const handleSearch = async (e) => {
     e.preventDefault();
+
     if (searchInput.trim() !== '') {
+      const keywordRef = doc(dbService, 'searchKeywords', searchInput.toLowerCase());
+
       try {
-        // Assuming you have a collection named 'searchKeywords' in Firestore
-        await addDoc(collection(dbService, 'searchKeywords'), {
-          keyword: searchInput,
-          timestamp: new Date(),
-        });
+        const keywordDoc = await getDoc(keywordRef);
+
+        if (keywordDoc.exists()) {
+          // If the keyword already exists, update the count
+          await updateDoc(keywordRef, {
+            count: keywordDoc.data().count + 1,
+            timestamp: serverTimestamp(),
+          });
+        } else {
+          // If the keyword does not exist, create a new document
+          await setDoc(keywordRef, {
+            keyword: searchInput.toLowerCase(),
+            count: 1,
+            timestamp: serverTimestamp(),
+          });
+        }
       } catch (error) {
         console.error('Error saving search keyword to Firebase:', error);
       }
     }
+
     // Navigate to search page
     navigate(`/shop/Search/${searchInput}`);
-
-    // Save the search keyword to Firebase
-    
 
     // Clear the search input
     setSearchInput('');
   };
+
 
   const handleMouseEnter = () => { setDropdownVisible(true); };
   const handleMouseLeave = () => { setDropdownVisible(false); };
@@ -124,7 +138,7 @@ export default function Header() {
         ref={dropdownRef}
         style={{
           position: 'absolute',
-          top: 'calc(100% + 10px)', // Adjust the distance as needed
+          top: 'calc(100% + 2px)', // Adjust the distance as needed
           right: '0',
           backgroundColor: '#fff',
           boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',

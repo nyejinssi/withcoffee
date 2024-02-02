@@ -2,33 +2,39 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import MBTIbackground from './coffeembti.png';
 import { authService, dbService } from '../fbase';
-import {
-  addDoc,
-  setDoc,
-  getDocs,
-  doc,
-  collection,
-  query,
-  onSnapshot,
-  orderBy,
-  serverTimestamp,
-  where,
-} from 'firebase/firestore';
+import { getDocs, collection, query, orderBy, limit } from 'firebase/firestore';
+
 const Main = () => {
   const [popularKeywords, setPopularKeywords] = useState([]);
+  const [testData, setTestData] = useState(null);
 
-  useEffect(() => {
-    const searchKeywordsRef = collection(dbService, 'searchKeywords');
-    const q = query(searchKeywordsRef, orderBy('timestamp', 'desc'));
+  useEffect(() => {    
+    const fetchPopularKeywords = async () => {
+      const searchKeywordsRef = collection(dbService, 'searchKeywords');
+      const q = query(
+        searchKeywordsRef,
+        orderBy('count', 'desc'),
+        orderBy('timestamp', 'desc'),
+        limit(5)
+      );
+      const querySnapshot = await getDocs(q);
+      const keywords = querySnapshot.docs.map((doc, index) => `${index + 1}. ${doc.data().keyword}`);
+      setPopularKeywords(keywords);
+    };
 
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const keywords = snapshot.docs.map((doc) => doc.data().keyword);
-      setPopularKeywords(keywords.slice(0, 5)); // 최근 5개만 가져오기
-    });
+    fetchPopularKeywords();
+    const fetchData = async () => {
+      try {
+          const response = await fetch('../MBTI/data.json');  // 파일 경로에 따라 수정
+          const data = await response.json();
+          setTestData(data);
+      } catch (error) {
+          console.error('Error fetching data:', error);
+      }
+  };
 
-    return () => unsubscribe(); // 컴포넌트 언마운트 시에 구독 해제
-  }, []);  // 최초 한 번만 실행
-
+  fetchData();
+  }, []); 
   return (
     <>
       <div style={{ position: 'relative', textAlign: 'center' }}>
@@ -43,18 +49,16 @@ const Main = () => {
             transform: 'translateX(-50%)',
           }}
         >
-          <Link to="/MBTI/MBTItest" style={{ textDecoration: 'none' }}>
-            <button style={{ backgroundColor: '#ffffff', color: '#000000', padding: '10px 20px', border: 'none' }}>
-              커피 MBTI
-            </button>
+          <Link to="/MBTI/MBTIMain" style={{ textDecoration: 'none' }}>
+            <button style={{ backgroundColor: '#ffffff', color: '#000000', padding: '10px 20px', border: 'none' }}>커피 MBTI</button>
           </Link>
         </div>
       </div>
-      <div>
-        <h2>실시간 인기 검색어</h2>
-        <ul>
-          {popularKeywords.map((keyword, index) => (
-            <li key={index}>{keyword}</li>
+      <div style={{  marginTop: '20px', border: '1px solid #ddd', padding: '20px', borderRadius: '10px' }}>
+        <h2 style={{textAlign: 'center'}}>실시간 인기 검색어</h2>
+        <ul style={{ listStyle: 'none', padding: 0 }}>
+          {popularKeywords.map((keyword) => (
+            <li key={keyword} style={{ fontSize: '1.2rem', margin: '8px 0', fontWeight: 'bold' }} dangerouslySetInnerHTML={{ __html: keyword }} />
           ))}
         </ul>
       </div>

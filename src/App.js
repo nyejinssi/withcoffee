@@ -1,10 +1,14 @@
 import React , {useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, BrowserRouter } from 'react-router-dom';
 import { authService } from './fbase';
+import GlobalStyle from './globalStyle';
 
 import Main from './main/Main';
 import Headers from './header/Headers';
 import UserHeader from './header/UserHeader';
+
+import Image from './coffeeMBTI/imageInput';
+import MbtibeansInput from './coffeeMBTI/MbtibeansInput';
 //--------------------------Sign------------------------------
 import Sign from './Auth/Sign';
 import PhoneSignIn from './Auth/PhoneSignIn';
@@ -27,8 +31,8 @@ import UpdateInfo from './MyPage/UpdateInfo';
 import LikedProduct from './MyPage/LikedProduct';
 import MyReview from './MyPage/MyReview';
 //------- MBTI------------------------
-import MBTItest from './MBTI/MBTItest';
-import MBTIdata from './MBTI/MBTIdata';
+import Start from './coffeeMBTI/StartPage'; 
+import Question from './coffeeMBTI/QuestionPage'; 
 //-----------------Shop-------------------
 import Beans from './shop/Beans';
 import Tools from './shop/Tools';
@@ -40,6 +44,7 @@ const App = () => {
   const [init, setInit] = useState(false); // init = false
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userObj, setUserObj] = useState(null); 
+
   useEffect(() => {
     authService.onAuthStateChanged((user) => {
       if(user){
@@ -50,10 +55,12 @@ const App = () => {
       }
       setInit(true);
     });
+    
   }, []);
   return (
     <div className="App">
       <BrowserRouter basename={process.env.PUBLIC_URL}>
+        <GlobalStyle />
         {isLoggedIn ? (
             <UserHeader/>
           ):(
@@ -88,9 +95,12 @@ const App = () => {
             </>
           )}
           <Route path="/" element={<Main />} />
-          <Route path="/MBTI/MBTItest/*" element={<MBTItest/>} />
+          <Route path="/image" element={<Image />} />
+          <Route path="/mbtibeans" element={<MbtibeansInput/>} />
           <Route path="/Auth/PhoneSignIn" element={<PhoneSignIn/>} />
-
+          <Route path='/MBTI/MBTIMain' element={<Start/>} />
+          <Route path='/MBTI/Question' element={<Question/>} />
+          
           <Route path="/shop/Beans" element={<Beans/>}/>
           <Route path="/shop/Tools" element={<Tools/>}/>
           <Route path="/shop/Detail/:productId"  element={<Detail/>}/>
