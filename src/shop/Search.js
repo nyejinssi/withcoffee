@@ -89,7 +89,7 @@ const Search = () => {
          <>
       {searchResults.length > 0 ? (
         <>
-        <h3>{searchQuery}에 대한 검색 결과</h3>
+        <h3>'{searchQuery}'에 대한 검색 결과</h3>
           <ul className="products-list">
           {searchResults.map((result) => (
         <li className="products-list-item" key={result.id}>

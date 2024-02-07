@@ -67,7 +67,9 @@ const Question = () => {
   };
 
   const Shops = () => {
-    navigate('/');
+    if (matchingurl) {
+      window.open(matchingurl, '_blank'); // 새로운 창에서 URL 열기
+    }
   };
 
   useEffect(() => {
