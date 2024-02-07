@@ -7,8 +7,14 @@ import Main from './main/Main';
 import Headers from './header/Headers';
 import UserHeader from './header/UserHeader';
 
+//
+import MoveDataPage from './shop/MoveDataPage';
+
+//
 import Image from './coffeeMBTI/imageInput';
 import MbtibeansInput from './coffeeMBTI/MbtibeansInput';
+
+
 //--------------------------Sign------------------------------
 import Sign from './Auth/Sign';
 import PhoneSignIn from './Auth/PhoneSignIn';
@@ -100,7 +106,7 @@ const App = () => {
           <Route path="/Auth/PhoneSignIn" element={<PhoneSignIn/>} />
           <Route path='/MBTI/MBTIMain' element={<Start/>} />
           <Route path='/MBTI/Question' element={<Question/>} />
-          
+          <Route path='/Shop/move' element={<MoveDataPage/>} />
           <Route path="/shop/Beans" element={<Beans/>}/>
           <Route path="/shop/Tools" element={<Tools/>}/>
           <Route path="/shop/Detail/:productId"  element={<Detail/>}/>

@@ -1,0 +1,264 @@
+#myPageReview{
+  margin-top: 15%;
+}
+
+.ReviewimgConts{
+  display: inline-block;
+  height: 80%;
+  width: 60%;
+  margin:1% 5%;
+}
+
+#idConts{
+  display: inline-block;
+}
+
+.writeReview{
+background: #8D5124;
+border: 1px solid #F1F1F1;
+border-radius: 14px;
+color:white;
+width: 7rem;
+font-size: 1.2
+}
+
+.myPageReview2{
+  margin-left: 20%;
+
+  background: rgba(192, 192, 192, 0.12);
+  border: 1px solid #F1F1F1;
+  border-radius: 17px;
+
+  margin-top: 5%;
+  margin-bottom:3%;
+  width:75%;
+}
+
+.pagination{
+justify-content:center;
+}
+
+.myPageReviewContents{
+display: grid;
+grid-template-columns: 2fr 7fr 2fr;
+  margin-bottom: 2%;
+  align-items: center;
+}
+
+.myPageReview2>.myPageReviewContents>a{
+color:white;
+text-decoration: none;
+}
+
+.myPageReviewBack{
+  background: rgba(192, 192, 192, 0.12);
+  border: 1px solid #F1F1F1;
+  border-radius: 17px;
+  margin-left: 10%;
+  margin-top: 2%;
+  margin-bottom: 2%;
+  width:80%;
+  padding:5% 15%;
+}
+
+.NewReviewArea, .WrittenReviewArea{
+  width:70%;
+  height: 300px;
+  text-align: start;
+  border:1px gray solid;
+  margin:auto;
+}
+
+.NewReviewPicture, .WrittenReviewPicture{
+  border: none;
+  text-align: center;
+  width:30%;
+  height:130%;
+  font-size:0.8rem;
+  display: grid;
+  margin:auto;
+  margin-bottom: 2%;
+  vertical-align: 0px;
+}
+
+.NewReviewSubmit, .WrittenReviewSubmit, .WrittenReviewCancle{
+  background: rgba(192, 192, 192, 0.12);
+  border: 1px gray solid;
+  border-radius: 15px;
+  width:30%;
+  font-size:0.8rem;
+  display: grid;
+  margin:auto;
+}
+
+.ReviewedList>img, .ReviewedList>h4{
+  box-sizing: border-box;
+  justify-content: center;
+  display: grid;
+}
+
+.ReviewedList>img{
+  margin:auto;
+}
+
+.ReviewedListButtons{
+  display: flex;
+  margin-left: auto;
+align-items: center;
+}
+
+.ReviewedListButtons>button{
+  margin-left: 5px;
+}
+
+.ReviewedListButtons>button{
+  justify-content: center;
+}
+
+.myPageReviewBack{
+  background: rgba(192, 192, 192, 0.12);
+  border: 1px solid #F1F1F1;
+  border-radius: 17px;
+  margin-left: 10%;
+  margin-top: 2%;
+  margin-bottom: 2%;
+  width:70%;
+}
+
+.WrittenReviewTitle{
+  font-weight: 600;
+  margin-left: 28%;
+}
+
+.EditReviewArea{
+  width:70%;
+  height: 300px;
+  text-align: start;
+  border:1px gray solid;
+  margin:auto;
+}
+
+.EditReviewPicture{
+  border: none;
+  text-align: center;
+  width:30%;
+  height:130%;
+  font-size:0.8rem;
+  display: grid;
+  margin:auto;
+  margin-bottom: 2%;
+  vertical-align: 0px;
+}
+
+.EditReviewSubmit, .EditReviewCancle{
+  background: rgba(192, 192, 192, 0.12);
+  border: 1px gray solid;
+  border-radius: 15px;
+  width:30%;
+  font-size:0.8rem;
+  display: grid;
+  margin:auto;
+}
+
+.ReviewedList>img, .ReviewedList>h4{
+  box-sizing: border-box;
+  justify-content: center;
+  display: grid;
+}
+
+.ReviewedList>img{
+  margin:auto;
+}
+
+.WrittenReviewPicture{
+  width:70%;
+  height: 70%;
+  margin-left: 30%;
+}
+
+.WrittenReviewWrap{
+  box-sizing: border-box;
+  background: rgba(192, 192, 192, 0.12);
+  border: 1px solid #F1F1F1;
+  border-radius: 17px;
+  width:70%;
+  margin-left: 25%;
+  place-items: center;
+  display: grid;
+  grid-template-columns: 3fr 2fr 2fr;
+}
+
+.WrittenReviewDetail{
+  text-align: left;
+}
+
+.deleteReview, .modifyReview{
+ background: rgba(192, 192, 192, 0.12);  
+  border: 1px solid gray;
+  border-radius: 14px;
+  width:10rem;
+  height:2rem;
+  box-sizing: border-box;
+
+  border-radius: 12px;
+  font-weight: 500;
+  font-size:0.8rem;
+  margin-left: 3%;
+}
+
+.WrittenReviewButtons{
+  display: flex;
+}
+
+.pagination{
+  justify-content:center;
+}
+
+
+.myPageReview2>.myPageReviewedContents>a{
+color:white;
+text-decoration: none;
+}
+.modifyReview, .deleteReview{
+  background: #8D5124;
+  border: 1px solid #F1F1F1;
+  border-radius: 14px;
+
+  box-sizing: border-box;
+  width:5rem;
+
+  border-radius: 12px;
+  font-weight: 500;
+  font-size:0.8rem;
+  color:white;
+  margin-right: 10px;
+}
+
+.review-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2%;
+  margin-top: 2%;
+}
+
+.review-text {
+  flex-grow: 1;
+  text-align: center;
+}
+
+.review-image {
+  margin-right: 10px;
+}
+
+.review-buttons {
+  display: flex;
+  align-items: center;
+}
+
+.button-wrapper {
+  margin-left: auto;
+}
+
+.button-wrapper button {
+  margin-left: 5px;
+}

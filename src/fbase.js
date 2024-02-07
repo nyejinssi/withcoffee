@@ -5,7 +5,6 @@ import {getFirestore} from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import { getDatabase } from "firebase/database";
 
-
 const firebaseConfig = {
     apiKey: "AIzaSyAeKFb4VzVOfA1Zpj-pGJKJAixQWStOGzk",
     authDomain: "withcoffee-89170.firebaseapp.com",
@@ -19,6 +18,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const authService = getAuth();
 export const dbService = getFirestore();
-export const storageService = getStorage(app);
-export const database = getDatabase();
+export const storageService = getStorage(); 
+export const realtimeDB = getDatabase();
 authService.languageCode = 'it';

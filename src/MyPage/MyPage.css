@@ -79,4 +79,20 @@
     margin: 5px 0;
   }
 
+  .product-info-container {
+    display: flex;
+    align-items: center;
+  }
   
+  .image-container {
+    margin-right: 20px;
+  }
+  
+  .likes-metadata {
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .review-container, .liked-container{
+    width:70%;
+  }

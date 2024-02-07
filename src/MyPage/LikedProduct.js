@@ -65,13 +65,19 @@ const LikedProduct = ()  => {
           <div className='liked-container'>
             <ul className="liked-list">
             {likedProducts.map((product) => (
-            <li key={product.id} className="liked-list-item">
-                <Link to={`/shop/Detail/${product.id}`}>
-                <img src={product.image} alt={product.name} style={{ width: '100px', height: '100px' }}/>
-                <h3>{product.name}</h3>
+              <li key={product.id} className="liked-list-item">
+                <Link to={`/shop/Detail/${product.id}`} className="product-link">
+                  <div className="product-info-container">
+                    <div className="image-container">
+                      <img src={product.image} alt={product.name} style={{ width: '100px', height: '100px' }} />
+                    </div>
+                    <div className="product-metadata">
+                      <h3>{product.name}</h3>
+                      <p className='likes-metadata' style={{textDecoration:'none'}}>브랜드 : {product.brand} | 타입 : {getTypeString(product.type)} | 가격 : {product.price}</p>
+                    </div>
+                  </div>
                 </Link>
-                <p className='posts-metadata'>브랜드 : {product.brand} | 타입 : {getTypeString(product.type)} | 가격 : {product.price}</p>
-            </li>
+              </li>
             ))}
         </ul>
           </div>

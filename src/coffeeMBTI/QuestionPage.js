@@ -60,18 +60,15 @@ const Question = () => {
       if (matchingCoffeeSnapshot.docs.length > 0) {
         const matchingCoffeeData = matchingCoffeeSnapshot.docs[0].data();
         setMatchingCoffee(matchingCoffeeData.name);
-        setMatchingurl(matchingCoffeeData.url); //url 저장됨
+        setMatchingurl(matchingCoffeeData.url);
         setMatchingdec(matchingCoffeeData.dec);
       }
     }
   };
 
   const Shops = () => {
-    if (matchingurl) {
-      window.open(matchingurl, '_blank');
-    }
+    navigate('/');
   };
-  
 
   useEffect(() => {
     setImagesLoaded(true); // Set the state to indicate that images are loaded

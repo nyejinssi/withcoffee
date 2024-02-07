@@ -192,8 +192,8 @@ const handleSortOrder = (value) => {
         <tbody>
           <tr>
           <th>타입</th>
-            <td  style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-              {/* <div className="filter-group"> */}
+          <td>
+          <label for="wholeBean">
             <input
               type="checkbox" 
               id="wholeBean"
@@ -201,10 +201,11 @@ const handleSortOrder = (value) => {
               checked={typeFilter === '0'}
               onChange={() => handleTypeFilter('0')}
             />
-             <label for="wholeBean">로스팅 홀빈</label>
-          </td>
+            로스팅 홀빈</label>
+             </td>
 
           <td>
+          <label for="grindedBean">
           <input
             type="checkbox" 
             id="grindedBean"
@@ -212,10 +213,11 @@ const handleSortOrder = (value) => {
             checked={typeFilter === '1'}
             onChange={() => handleTypeFilter('1')}
           />
-          <label for="grindedBean">분쇄</label>
+          분쇄</label>
           </td>
 
           <td>
+          <label for="rawBean">
           <input
             type="checkbox" 
             id="rawBean"
@@ -223,7 +225,7 @@ const handleSortOrder = (value) => {
             checked={typeFilter === '2'}
             onChange={() => handleTypeFilter('2')}
           />
-          <label for="rawBean">
+          
           생두
           </label>
           </td>
@@ -232,6 +234,7 @@ const handleSortOrder = (value) => {
           <tr>
           <th>카페인 유무</th>
             <td>
+            <label>
           <input
             type="checkbox" 
             value="1"
@@ -239,20 +242,18 @@ const handleSortOrder = (value) => {
             checked={caffeineFilter === '1'}
             onChange={() => handleCaffeineFilter('1')}
           />
-          <label for="caffeine">
           카페인
         </label>
         </td>
 
         <td>
+        <label>
           <input
             type="checkbox" 
-            id="decaffeine"
             value="0"
             checked={caffeineFilter === '0'}
             onChange={() => handleCaffeineFilter('0')}
           />
-          <label for="decaffeine">
           디카페인
         </label>
         </td>

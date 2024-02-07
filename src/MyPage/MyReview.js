@@ -46,6 +46,7 @@ const MyReview = () => {
           <li className={location.pathname === '/mypage/LikedProduct' ? 'active' : ''}><Link to="/mypage/LikedProduct">관심상품</Link></li>
         </ul>
       </nav>
+      
   <div className="review-container">
   <ul className="review-list">
   <hr style={{marginBottom: '20px', marginTop:'40px'}}/>
