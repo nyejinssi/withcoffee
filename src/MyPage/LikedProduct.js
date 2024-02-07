@@ -24,13 +24,11 @@ const LikedProduct = ()  => {
               id: doc.id,
               ...doc.data(),
             }));
-    
             setLikedProducts(likedProductsData);
           } catch (error) {
             console.error('Error fetching liked products:', error);
           }
-        };
-    
+        };    
         fetchLikedProducts();
       }, [user.uid]);
     
@@ -54,7 +52,7 @@ const LikedProduct = ()  => {
 
     return (
       <div className="home-container">
-      <nav className="home-nav">
+      <nav className="home-nav" style={{ backgroundColor: 'black' }}>
         <ul>
         <li className={location.pathname === '/mypage' ? 'active' : ''}><Link to="/mypage">내가 쓴 글</Link></li>
           <li className={location.pathname === '/mypage/MyComment' ? 'active' : ''}><Link to="/mypage/MyComment">댓글단 글</Link></li>
@@ -64,7 +62,6 @@ const LikedProduct = ()  => {
           <li className={location.pathname === '/mypage/LikedProduct' ? 'active' : ''}><Link to="/mypage/LikedProduct">관심상품</Link></li>
         </ul>
       </nav>
-
           <div className='liked-container'>
             <ul className="liked-list">
             {likedProducts.map((product) => (

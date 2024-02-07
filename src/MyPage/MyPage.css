@@ -11,6 +11,7 @@
   
   .home-nav {
     text-align: center;
+    margin-bottom: 0px;
   }
   
   .home-nav ul {
@@ -44,7 +45,7 @@
   .home-nav li.active a {
     color: white;
   }
-  .posts-container, .liked-container, .review-container {
+  .posts-container, .liked-container{
     margin-top: 20px;
   }
   

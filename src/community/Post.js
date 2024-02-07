@@ -14,15 +14,18 @@ const Posts = ({ category, setCategory }) => {
       try {
         const postsCollection = collection(dbService, 'posts');
         let categoryQuery = postsCollection;
-
+  
         if (category) {
           categoryQuery = query(postsCollection, where('Class', '==', category));
         }
-
+  
         const postsSnapshot = await getDocs(categoryQuery);
         const allPosts = postsSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-
-        setPosts(allPosts);
+  
+        // Sort posts by the 'time' property in descending order
+        const sortedPosts = allPosts.sort((a, b) => b.time - a.time);
+  
+        setPosts(sortedPosts);
       } catch (error) {
         console.error('Error fetching posts:', error);
       }

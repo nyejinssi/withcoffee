@@ -102,14 +102,23 @@ const Write = () => {
     };
 
     return (
-      <div className="shop-review-container">
-          <form onSubmit = {onSubmit} style={{ margin: '0 auto', textAlign:'center' }}>
-          {selectedProduct && (  // selectedProduct이 존재하는 경우에만 렌더링
-              <h2 className='productName'>{selectedProduct.name}</h2>
+      <div id="myPageReview" style={{ fontSize: "1.5em", fontWeight: 700, marginTop: "5%", marginBottom: "1%", marginLeft: "10%" }}>
+        <div className="myPageReviewBack" method="post">
+          <div style={{ marginLeft: "5%", marginTop: "2%" }}>
+            <span style={{ fontWeight: 700, fontSize: "1.5rem" }}>
+              리뷰 작성하기
+            </span>
+            {selectedProduct && (  // selectedProduct이 존재하는 경우에만 렌더링
+              <span style={{ fontWeight: 400, fontSize: "1.2rem" }}>
+                &gt; {selectedProduct.name}
+              </span>
             )}
-              <textarea
-                  value = {userreview}  
-                  placeholder = "내용을 입력하세요" 
+          </div>
+          <form onSubmit = {onSubmit}> 
+              <input 
+                  value = {userreview} 
+                  type = "text" 
+                  placeholder = "당신의 솔직한 리뷰를 알려주세요 :)" 
                   maxLength = {120} 
                   onChange = {onChange} 
                   className='NewReviewArea'
@@ -118,13 +127,13 @@ const Write = () => {
               <FaStar
                 key={index}
                 size="20"
-                onMouseLeave={() => starScore(index)}
-                onClick={resetStars}              
+                onMouseEnter={() => starScore(index)}
+                onClickCapture={resetStars}              
                 color={index < selectedScore ? 'gold' : 'lightGray'}
               ></FaStar>
             ))}
               <input type = "file" accept = "image/*" onChange={onFileChange}/>
-              <input className="review-save-button" type = "submit" value = "저장"/>
+              <input type = "submit" value = "저장" style={{backgroundColor: 'black', color: 'White', padding: '10px', border: 'none', borderRadius: '4px', cursor: 'pointer' }}/>
               {attachment && (
                   <div>
                       <img src = {attachment} width = "100px" height = "80px" />
@@ -132,6 +141,7 @@ const Write = () => {
                   </div>
                   )}
           </form>
+      </div>
       </div>
     );
 };

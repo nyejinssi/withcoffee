@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { dbService } from '../fbase';
+import { getDatabase, ref, get } from "firebase/database";
 import { Link, Route, useLocation } from 'react-router-dom';
-import ProductDetail from './Detail';
+import ToolsLoadList from './ToolsLoadList';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import shop from './shop.css';
 
@@ -26,25 +27,49 @@ const Tools= () => {
   const types=['에스프레소머신', '캡슐/POD머신', '업소용에스프레소머신', '커피메이커', '우유거품기', '여과지']
   const [selectedTypes, setSelectedTypes] = useState([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const productsCollection = collection(dbService, 'Tools');
-        const querySnapshot = await getDocs(productsCollection);
+ const db = getDatabase();
+ const ToolsRef = ref(db, 'Tools');
+//  const query = ToolsRef.limitToFirst(20);
 
-        const fetchedProducts = querySnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
+ get(ToolsRef).then((snapshot) => {
+   if (snapshot.exists()) {
+     const products = [];
+     snapshot.forEach((childSnapshot) => {
+       const productId = childSnapshot.key;
+       const productData = childSnapshot.val();
+       // productId와 productData를 사용하여 필요한 작업 수행
+       products.push({
+         id: productId,
+         ...productData,
+       });
+     });
+     setProducts(products);
+   } else {
+     console.log("No data available");
+   }
+ }).catch((error) => {
+   console.error("Error fetching data:", error);
+ });
 
-        setProducts(fetchedProducts);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const productsCollection = collection(dbService, 'Tools');
+  //       const querySnapshot = await getDocs(productsCollection);
 
-    fetchData();
-  }, []);
+  //       const fetchedProducts = querySnapshot.docs.map(doc => ({
+  //         id: doc.id,
+  //         ...doc.data(),
+  //       }));
+
+  //       setProducts(fetchedProducts);
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
 
   useEffect(() => {
     const filtered = products.filter(product => {
@@ -101,10 +126,29 @@ const Tools= () => {
   };
 
   const generatePageNumbers = () => {
+    const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
     const pageNumbers = [];
-    for (let i = 1; i <= Math.ceil(filteredProducts.length / itemsPerPage); i++) {
+  
+    let startPage = Math.max(currentPage - 4, 1);
+    let endPage = Math.min(currentPage + 5, totalPages);
+  
+    if (totalPages <= 10) {
+      startPage = 1;
+      endPage = totalPages;
+    } else {
+      if (currentPage <= 5) {
+        startPage = 1;
+        endPage = 10;
+      } else if (currentPage + 4 >= totalPages) {
+        startPage = totalPages - 9;
+        endPage = totalPages;
+      }
+    }
+  
+    for (let i = startPage; i <= endPage; i++) {
       pageNumbers.push(i);
     }
+  
     return pageNumbers;
   };
 
@@ -180,150 +224,177 @@ const handleSortOrder = (value) => {
     <div className="shop-container">
       <nav className="shop-nav">
         <li><Link to="/shop/Beans">원두</Link></li>
-        <li style={{color:'white', backgroundColor:'black'}}>도구</li>
+        <li><Link to="/shop/Tools">도구</Link></li>
       </nav>
 
       <div className="filter-container">
-        <div className="filter-group">
-          <p>타입</p>
-          {types.map((type) => (
-            <label key={type}>
+      <table className="filter-table">
+        <tbody>
+          <tr>
+            <th>타입</th>
+              {types.map((type) => (
+                <td>
+                <label key={type}>
+                  <input
+                    type="checkbox" className="custom-checkbox"
+                    value={type}
+                    checked={selectedTypes.includes(type)}
+                    onChange={() => handleTypeFilter(type)}
+                  />
+                  {type}
+                </label>
+                </td>
+              ))}
+          </tr>
+
+      <tr>
+        <th>브랜드</th>
+          {brands.map((brand) => (
+            <td>
+            <label key={brand}>
               <input
-                type="checkbox"
-                value={type}
-                checked={selectedTypes.includes(type)}
-                onChange={() => handleTypeFilter(type)}
+                type="checkbox" className="custom-checkbox"
+                value={brand}
+                checked={brandFilter.includes(brand)}
+                onChange={() => handleBrandFilter(brand)}
               />
-              {type}
+              {brand}
             </label>
-        ))}
-      </div>
+            </td>
+          ))}
+      </tr>
 
-      <div className="filter-group">
-        <p>브랜드</p>
-        {brands.map(brand => (
-          <label key={brand}>
+      <tr>
+        <th>별점</th>
+        <td>
+          <label>
             <input
-              type="checkbox"
-              value={brand}
-              checked={brandFilter.includes(brand)}
-              onChange={() => handleBrandFilter(brand)}
+              type="checkbox" className="custom-checkbox"
+              value="1"
+              checked={rateFilter === '1'}
+              onChange={() => handleRateFilter('1')}
             />
-            {brand}
+            1점 이상
           </label>
-        ))}
-      </div>
+          </td>
 
-    <div className="filter-group">
-      <p>가격대</p>
-      {priceRanges.map((range, index) => (
-        <label key={index}>
-          <input
-            type="checkbox"
-            value={index}
-            checked={priceFilter.includes(index.toString())}
-            onChange={() => handlePriceFilter(index.toString())}
-          />
-          {range.label}
-        </label>
-      ))}
-    </div>
+          <td>
+          <label>
+            <input
+              type="checkbox" className="custom-checkbox"
+              value="2"
+              checked={rateFilter === '2'}
+              onChange={() => handleRateFilter('2')}
+            />
+            2점 이상
+          </label>
+          </td>
 
-      <div className="filter-group">
-      <p>별점</p>
-        <label>
-          <input
-            type="checkbox"
-            value="1"
-            checked={rateFilter === '1'}
-            onChange={() => handleRateFilter('1')}
-          />
-          1점 이상
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            value="2"
-            checked={rateFilter === '2'}
-            onChange={() => handleRateFilter('2')}
-          />
-          2점 이상
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            value="3"
-            checked={rateFilter === '3'}
-            onChange={() => handleRateFilter('3')}
-          />
-          3점 이상
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            value="4"
-            checked={rateFilter === '4'}
-            onChange={() => handleRateFilter('4')}
-          />
-          4점 이상
-        </label>
-      </div>
+          <td>
+          <label>
+            <input
+              type="checkbox" className="custom-checkbox"
+              value="3"
+              checked={rateFilter === '3'}
+              onChange={() => handleRateFilter('3')}
+            />
+            3점 이상
+          </label>
+          </td>
+
+          <td>
+          <label>
+            <input
+              type="checkbox" className="custom-checkbox"
+              value="4"
+              checked={rateFilter === '4'}
+              onChange={() => handleRateFilter('4')}
+            />
+            4점 이상
+          </label>
+        </td>
+      </tr>
+
+      <tr>
+        <th>가격대</th>
+          {priceRanges.map((range, index) => (
+            <td>
+            <label key={index}>
+              <input
+                type="checkbox" className="custom-checkbox"
+                value={index}
+                checked={priceFilter.includes(index.toString())}
+                onChange={() => handlePriceFilter(index.toString())}
+              />
+              {range.label}
+            </label>
+            </td>
+          ))}
+      </tr>  
+    </tbody>
+  </table>
+</div>
 
 
-      <div className="sort-group">
-        <p style={{ marginLeft:40 }}>정렬 기준</p>
-        <label>
+<div className="sort-group">
+  <table className='sort-table'>
+    <tr>
+      <td style={{ backgroundColor: sortOrder === 'popularity' || sortOrder === '' ? 'black' : 'white' }}>
+        <label style={{ color: sortOrder === 'popularity' || sortOrder === '' ? 'white' : 'black' }}>
           <input
             type="checkbox"
             value="popularity"
-            checked={sortOrder === 'popularity'}
-            onChange={() => handleSortOrder('popularity')}
+            checked={sortOrder === 'popularity' || sortOrder === ''}
+            onChange={() => handleSortOrder(sortOrder === 'popularity' ? '' : 'popularity')}
           />
           인기순
         </label>
-        <label>
+      </td>
+
+      <td style={{ backgroundColor: sortOrder === 'priceHigh' ? 'black' : 'white' }}>
+        <label style={{ color: sortOrder === 'priceHigh' ? 'white' : 'black' }}>
           <input
             type="checkbox"
             value="priceHigh"
             checked={sortOrder === 'priceHigh'}
-            onChange={() => handleSortOrder('priceHigh')}
+            onChange={() => handleSortOrder(sortOrder === 'priceHigh' ? '' : 'priceHigh')}
           />
           가격 높은 순
         </label>
-        <label>
+      </td>
+
+      <td style={{ backgroundColor: sortOrder === 'priceLow' ? 'black' : 'white' }}>
+        <label style={{ color: sortOrder === 'priceLow' ? 'white' : 'black' }}>
           <input
             type="checkbox"
             value="priceLow"
             checked={sortOrder === 'priceLow'}
-            onChange={() => handleSortOrder('priceLow')}
+            onChange={() => handleSortOrder(sortOrder === 'priceLow' ? '' : 'priceLow')}
           />
           가격 낮은 순
         </label>
-        <label>
+      </td>
+
+      <td style={{ backgroundColor: sortOrder === 'ratingHigh' ? 'black' : 'white' }}>
+        <label style={{ color: sortOrder === 'ratingHigh' ? 'white' : 'black' }}>
           <input
             type="checkbox"
             value="ratingHigh"
             checked={sortOrder === 'ratingHigh'}
-            onChange={() => handleSortOrder('ratingHigh')}
+            onChange={() => handleSortOrder(sortOrder === 'ratingHigh' ? '' : 'ratingHigh')}
           />
           인터넷 별점 높은 순
         </label>
-      </div>
-    </div>
+      </td>
+    </tr>
+  </table>
+</div>
 
-       {/* 상품 목록 렌더링 */}
-      <ul className="products-list">
-        {getCurrentProducts().map(product => (
-          <li className="products-list-item" key={product.id}>
-             <h3><Link to={`/shop/Detail/${product.id}`}>{product.name}</Link></h3>
-             <p className="products-metadata"> 카테고리: {product.type} | 브랜드: {product.brand} | 가격: {formatPrice(product.price)} | 인터넷 별점: {product.rate}</p>
-            <Link to={`/shop/Detail/${product.id}`}>{product.image && <img src={product.image} alt="Product" style={{ width: '100px', height: '100px' }} />}</Link>
-          </li>
-        ))}
-      </ul>
+    <ToolsLoadList products={getCurrentProducts()}/>
+            {/* 페이지 넘기기 버튼 */}
     
-    {/* 페이지 넘기기 버튼 */}
-      <div>
+        
+      <div className='pagination-button'>
         {generatePageNumbers().map(pageNumber => (
           <button className='product-list-next-button' key={pageNumber} onClick={() => setCurrentPage(pageNumber)} disabled={currentPage === pageNumber}>
             {pageNumber}

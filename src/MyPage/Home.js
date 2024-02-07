@@ -36,7 +36,7 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      <nav className="home-nav">
+      <nav className="home-nav" style={{ backgroundColor: 'black' }}>
         <ul>
         <li className={location.pathname === '/mypage' ? 'active' : ''}><Link to="/mypage">내가 쓴 글</Link></li>
           <li className={location.pathname === '/mypage/MyComment' ? 'active' : ''}><Link to="/mypage/MyComment">댓글단 글</Link></li>

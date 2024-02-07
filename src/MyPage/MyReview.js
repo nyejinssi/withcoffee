@@ -36,7 +36,7 @@ const MyReview = () => {
 
   return (
     <div className="home-container">
-      <nav className="home-nav">
+      <nav className="home-nav" style={{ backgroundColor: 'black' }}>
         <ul>
         <li className={location.pathname === '/mypage' ? 'active' : ''}><Link to="/mypage">내가 쓴 글</Link></li>
           <li className={location.pathname === '/mypage/MyComment' ? 'active' : ''}><Link to="/mypage/MyComment">댓글단 글</Link></li>
@@ -46,28 +46,43 @@ const MyReview = () => {
           <li className={location.pathname === '/mypage/LikedProduct' ? 'active' : ''}><Link to="/mypage/LikedProduct">관심상품</Link></li>
         </ul>
       </nav>
-
-      <div className="review-container">
-        <ul className="review-list">
-          {myReviews.map((review) => (
-            <li key={review.id} className="review-list-item">
-              <Link to={`/shop/Detail/${review.ProductID}`}>
-              <img src={review.image} alt={review.name} style={{ width: '150px', height: '150px' }}/>
-              <h3>{review.name}</h3></Link>
-              <div></div>
-              <img src={review.reviewimage} alt={review.name} style={{ width: '100px', height: '100px' }}/>
-              <p className='review-text'>{review.text}</p>
-              <div className='detail-rating'>{[0, 1, 2, 3, 4].map((index) => (
+  <div className="review-container">
+  <ul className="review-list">
+  <hr style={{marginBottom: '20px', marginTop:'40px'}}/>
+    {myReviews.map((review) => (
+      <li key={review.id} className="review-list-item">
+        <h3>
+          <Link to={`/shop/Detail/${review.ProductID}`}>
+            {review.name}
+          </Link>
+        </h3>
+        <div className="review-details-container" style={{ display: 'flex' }}>
+          <div className="image-container" style={{ marginRight: '20px' }}>
+            <Link to={`/shop/Detail/${review.ProductID}`}>
+              <img src={review.image} alt={review.name} style={{ width: '150px', height: '150px' }} />
+            </Link>
+          </div>
+          <div>
+          <span className="rating-container">
+            {[0, 1, 2, 3, 4].map((index) => (
               <FaStar
                 key={index}
                 size="15"
                 color={index < review.userrate ? 'gold' : 'lightGray'}
               ></FaStar>
-            ))}</div>
-            </li>
-          ))}
-        </ul>
-      </div>
+            ))}
+            &nbsp;&nbsp;{review.userrate}
+          </span>
+          <p className='review-text'>{review.text}</p>
+          <img src={review.reviewimage} alt={review.name} style={{ width: '100px', height: '100px' }} />
+        </div>
+        </div>
+      </li>
+    ))}
+  </ul>
+</div>
+
+
 </div>
   );
 };

@@ -35,12 +35,13 @@ const UserInfo = () => {
           });
     
           console.log('정보 입력 완료!');
-          navigate('Auth/SignUpDone');
+          navigate('/Auth/SignUpDone');
         }
       });
     };
     const containerStyle = {
       display: 'flex',
+      flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
       height: '80vh', // 화면의 높이에 맞게 조절할 수 있습니다.
@@ -54,19 +55,19 @@ const UserInfo = () => {
 
       return (
         <div style={containerStyle}>
-      <form style={formStyle}>
-        <p style={{ fontSize: '1.5em',fontWeight: 'bold'}}>사용자 정보 입력</p>
-        <p> 해당 정보를 입력하지 않을 경우, <br/> 커뮤니티, 쇼핑 등의 활동에 제약이 있을 수 있습니다. </p>
-        <label style={{textAlign:'left'}}> 닉네임
-          <input type="text" name="nickname" placeholder='ex. 커피윗유' required style={{width:'100%'}}/>
-        </label>
-        <br />
-        <label style={{textAlign:'left'}}> 이름
-          <input type="text" name="name" placeholder='홍길동' required style={{width:'100%'}}/>
-        </label>
-        <br />
-        <button type="submit">회원가입하기</button>
-      </form>
+          <p style={{ fontSize: '1.5em',fontWeight: 'bold',  textAlign:'center'}}>사용자 정보 입력</p>
+          <p style={{ textAlign:'center'}}> 해당 정보를 입력하지 않을 경우, <br/> 커뮤니티, 쇼핑 등의 활동에 제약이 있을 수 있습니다. </p>
+          <form style={{textAlign:'center', maxWidth: '20%', width: '100%', alignItems: 'center'}} onSubmit={handleSubmit}>
+            <label style={{textAlign:'left'}}> 닉네임
+              <input type="text" name="nickname" placeholder='ex. 커피윗유' required style={{width:'100%'}}/>
+            </label>
+            <br />
+            <label style={{textAlign:'left'}}> 이름
+              <input type="text" name="name" placeholder='홍길동' required style={{width:'100%'}}/>
+            </label>
+            <br />
+            <button type="submit" style={{ backgroundColor: 'black', color: 'white', border: 'gray'}}>회원가입하기</button>
+          </form>
     </div>
       );
         }    

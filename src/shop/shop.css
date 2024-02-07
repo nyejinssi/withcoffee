@@ -4,7 +4,14 @@
     padding: 20px;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    /* align-items: center; */
+  }
+
+  .shop-nav, .detail-button-container{
+    margin-bottom: -0.5rem;
+    justify-content: flex-start;
+    background-color: black;
+    width:max-content;
   }
   
   .shop-nav ul {
@@ -15,21 +22,24 @@
   
   .shop-nav li {
     display: inline;
-    margin-right: 15px;
+    margin-right: 7.5px;
+    margin-left: 7.5px;
   }
   
   .shop-nav a {
     text-decoration: none;
-    color: #333;
+    color: white;
     font-weight: bold;
     padding: 8px;
     border-radius: 4px;
     transition: background-color 0.3s;
   }
   
-  .shop-nav a:hover {
+  .shop-nav a:hover, .detail-button-container button:hover {
     background-color: #f0f0f0;
+    color: black;
   }
+  
   
   .product-list-next-button {
     background-color: #000000;
@@ -58,6 +68,13 @@
     border-bottom: 1px solid #ccc;
     margin-bottom: 20px;
     padding-bottom: 20px;
+    display: flex; /* Make the items flex containers */
+  } 
+
+  .product-details {
+    margin-left: 20px; /* Adjust the margin as needed */
+    display: flex;
+    flex-direction: column;
   }
   
   .products-list-item a {
@@ -79,43 +96,48 @@
     margin: 5px 0;
   }
 
-  .filter-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
+  .filter-table{
+    margin-top:25px;
+    margin-bottom: 5px;
+  }
+
+  .filter-table th {
+    background-color: #000000;
+    color:white;
+    text-align: center;
+    width:20%
   }
 
   .filter-group {
     display: flex;
-    flex-direction: column;
     align-items: flex-start;
-    max-width: 80%;
-    margin-bottom: 5%;
+    /* max-width: 80%; */
+    /* margin-bottom: 5%; */
+  }
+
+  .filter-group input{
+    margin-right: 3px;
   }
   
-  .filter-group label {
-    display: block;
+  .filter-group label { 
     position: relative;
-    padding-left: 40px;
     cursor: pointer;
-    margin-bottom: 10px;
+    margin-bottom: -5px;
+    margin-right: 5px;
+    margin-left: 5px;
+    border-radius: 4px;
+    /* transition: background-color 0.3s; */
   }
   
-  .filter-group p{
+  .filter-group h3{
     display: block;
-    padding-left: 40px;
+    /* padding-left: 40px; */
     font-weight: bold;
-    margin:0;
+    margin-bottom:0.5rem;
   }
 
-  .sort-group p{
-    display: block;
-    padding-left: 40px;
-    font-weight: bold;
-    }
-
   
-  .filter-group input[type="checkbox"], .sort-group input[type="checkbox"] {
+  .sort-group input[type="checkbox"] {
     display: none;
   }
   
@@ -123,53 +145,69 @@
     display: flex;
     align-items: center;
     margin-top: 10px;
-    margin-bottom:  4rem;
+    margin-bottom: 10px;
     align-items: flex-end;
   }
   
   .sort-group label {
     display: block;
     position: relative;
-    padding-left: 40px;
+    padding-left: 35px;
+    padding-right: 35px;
     cursor: pointer;
     flex: 1;
     white-space: nowrap;
-    margin-bottom: 10px;
+    margin: 10px;
   }
 
-  #detail-container, #detail-container p{
+  .sort-group td {
+  width: 70%; /* Adjust the width as needed */
+  padding-left: 10px; /* Adjust the padding as needed */
+}
+
+  .detail-container{
     display: flex; flex-direction: column; align-items: center;
   }
 
-  #detail-container h2{
-    display: flex; flex-direction: column; margin: 0.75rem;
+  .detail-container h2{
+    margin-bottom: 1rem;
+    padding: 0.4rem 0.8rem;
   }
 
-  #button-container {
+  .button-container {
     display: flex;
-    flex-direction: row; /* Make the buttons horizontal */
-    margin-top: 1rem; /* Add some spacing between the content and buttons */
+    flex-direction: row;
+    margin-top: 1rem;
+    background-color: #000000;
+  }
+
+  .button-container button{
+    color:black
+  }
+
+  .button-container button a{
+    color:white;
   }
 
   .detail-rating{
     display: flex;
     align-items: center;
-    justify-content: center;
-  }
-
-  .detail-rating .star {
-    margin-right: 3px; /* Adjust as needed to add space between stars */
+    /* justify-content: center; */
   }
   
-  #detail-container button{
-    margin-right: 1rem;
-    background-color: rgb(255, 255, 255); color: black; border: rgb(255, 255, 255);
+  .detail-container button{
+    border: rgb(255, 255, 255);
+    background-color: #000000;
   }
 
-  .detail-review{
+  .user-review-container{
     margin-bottom: 5%;
+    width:60%;
   }
 
+  .user-review-container h2{
+    text-align: center;
+  }
   .detail-image-container {
     display: flex;
     justify-content: center;
@@ -180,4 +218,48 @@
   .detail-image {
     width: 75px;
     height: 75px;
+  }
+
+  .detail-container table{
+    border:none;
+    /* display: flex; */
+    margin-left: 30px;
+    margin-bottom: 5%;
+    height: 75%;
+  }
+
+  .detail-container, table tr:nth-child(even){
+    background-color: white;
+  }
+
+  .detail-container th {
+    font-weight: bold;
+    color: #333;
+    text-align: start;
+  }
+
+  .detail-container td {
+    text-align: end;
+    text-align: start;
+  }
+  
+  .detail-button-container button {
+    background-color: black;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  .detail-button-container button:hover {
+    background-color: white !important;
+    color: black !important;
+  }
+  
+  .pagination-button{
+    align-self: center;
+  }
+
+  .detail-review{
+    margin-left: 50px;
   }

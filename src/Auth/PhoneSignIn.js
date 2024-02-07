@@ -16,6 +16,7 @@ const PhoneSignIn = () => {
   const appVerifier = window.recaptchaVerifier; 
   const [phoneNumber, SetPhoneNumber] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
+  const [message, setMessage] = useState("");
 
     const getPhoneNumberFromUserInput = () => {
       const phoneNumber = "+82" + value.substring(1);
@@ -29,15 +30,17 @@ const PhoneSignIn = () => {
           console.log('reCAPTCHA solved:', response);
         },
       });
-      authService.languageCode = "ko";		// 한국어로 해줍시다
-      const phoneNumber = getPhoneNumberFromUserInput(); // 위에서 받아온 번호
+      authService.languageCode = "ko";		
+      const phoneNumber = getPhoneNumberFromUserInput(); 
       const appVerifier = window.recaptchaVerifier;
       signInWithPhoneNumber(authService, phoneNumber, appVerifier)
         .then((confirmationResult) => {
           window.confirmationResult = confirmationResult;	// window
+          setMessage("문자가 성공적으로 전송되었습니다.");
         })
         .catch((error) => {
           console.log("SMS FAILED");
+          setMessage("문자 전송에 실패했습니다. 다시 시도해주세요.");
         });
     };
 
@@ -69,11 +72,11 @@ const PhoneSignIn = () => {
               createdAt: serverTimestamp(),
               // Add other fields as needed
             });
-            navigate('Auth/Info/Phone');
+            navigate('/Auth/Info/Phone/');
           }
-          navigate('/');
         } else {
           console.error("User is not signed in.");
+            navigate('/');
         }
       } else {
         console.error("Confirmation result is null.");
@@ -88,19 +91,25 @@ const PhoneSignIn = () => {
     return (
       <>
         <div style={{ textAlign: 'center', alignItems: 'center' }}>
-          <img src={logo} className="logo_img" alt="logo" style={{width: '10%'}} />
-          <p style={{ fontSize: '1.5em', fontWeight: 'bold' }}> 전화번호로 로그인 | 회원가입</p>
+          <p style={{ fontSize: '1.5em', fontWeight: 'bold' }}> 전화번호로 <br/>로그인 | 회원가입</p>
         </div>
 
-        <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-          <div id="sign-in-button"></div>
-          <input onChange={(e) => Setvalue(e.target.value)} type="text" placeholder='전화번호 ex. 01011111111' style={{ width: '10%' }}/>
-          <button onClick={onClickHandle} style={{ backgroundColor:'black', color:'white', border:'gray'}} >문자보내기</button>
-          <br /><br />
-          <input onChange={(e) => setVerificationCode(e.target.value)} type="text" value={verificationCode} placeholder='인증번호 ex. 010101' style={{ width: '10%' }}/>
-          <button onClick={onClickHandle2} style={{ backgroundColor:'black', color:'white', border:'gray'}}>인증번호 확인하기</button>
+        <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <div id="sign-in-button"></div>
+        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline' }}>
+          <input onChange={(e) => Setvalue(e.target.value)} type="text" placeholder='전화번호' style={{ width: '75%' }} />
+          <button onClick={onClickHandle} style={{ backgroundColor: 'black', color: 'white', border: 'gray', marginLeft: '10px', padding: '8px', marginTop: '5px', marginBottom: '5px', width: '25%' }}> 전송 </button>
         </div>
-  </>
+        <p style={{ color: message.includes("성공") ? "green" : "red" }}>{message}</p>
+        <p style={{ fontSize: '80%', color: 'red' }}> '-'없이 입력해주세요! ex. 01012345678 </p>
+        <br/>
+        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline' }}>
+          <input onChange={(e) => setVerificationCode(e.target.value)} type="text" value={verificationCode} placeholder='인증번호' style={{ width: '75%' }} />
+          <button onClick={onClickHandle2} style={{ backgroundColor: 'black', color: 'white', border: 'gray', marginLeft: '10px', padding: '8px', marginTop: '5px', marginBottom: '5px', width: '25%' }}> 확인 </button>
+        </div>
+        <p style={{ fontSize: '80%', color: 'red' }}>문자로 전송된 6자리의 인증번호를 입력해주세요!</p>
+      </div>
+      </>
    );
 }    
 

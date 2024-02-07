@@ -1,5 +1,5 @@
-#myPageReview{
-  margin-top: 15%;
+.review-container{
+  text-align: 'center';
 }
 
 .ReviewimgConts{
@@ -62,8 +62,8 @@ text-decoration: none;
 }
 
 .NewReviewArea, .WrittenReviewArea{
-  width:70%;
-  height: 300px;
+  width:750px;
+  height: 150px;
   text-align: start;
   border:1px gray solid;
   margin:auto;
@@ -234,13 +234,6 @@ text-decoration: none;
   margin-right: 10px;
 }
 
-.review-container {
-  display: flex;
-  align-items: center;
-  margin-bottom: 2%;
-  margin-top: 2%;
-}
-
 .review-text {
   flex-grow: 1;
   text-align: center;
@@ -271,4 +264,16 @@ text-decoration: none;
   border-radius: 4px;
   cursor: pointer;
   margin-top: 20px;
+}
+
+.productName{
+  margin-bottom: 1rem;
+  padding: 0.4rem 0.8rem;
+  text-align: justify;
+}
+
+.review-save-button{
+  background-color: rgb(0, 0, 0);
+  border: rgb(0, 0, 0);
+  padding: 1rem 2rem;
 }

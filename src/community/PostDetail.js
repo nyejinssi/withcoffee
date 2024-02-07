@@ -230,14 +230,16 @@ const PostDetail = () => {
             <h2>{post.PostTitle}</h2>
           </p>
           <div style={{ position: 'relative' }}>
-            <button onClick={toggleDropdown} style={{ backgroundColor: 'white', color: 'black', border: 'gray', width: '3%' }}>⋮</button>
-            {dropdownVisible && (
-              <div style={{ position: 'absolute', top: '100%', right: 0, width: '10%' }}>
-                <button onClick={handleDeleteClick} style={{ backgroundColor: 'white', color: 'black', border: 'gray', width: '100%' }}>삭제</button>
-                <button onClick={handleEditClickInDropdown} style={{ backgroundColor: 'white', color: 'black', border: 'gray', width: '100%' }}>수정</button>
-              </div>
-            )}
-          </div>
+  <button onClick={toggleDropdown} style={{ backgroundColor: 'white', color: 'black', border: 'gray', width: '3%' }}>⋮</button>
+  {dropdownVisible && (
+    <div style={{ position: 'absolute', top: '100%', left: 0, width: '10%' }}>
+      <button onClick={handleDeleteClick} style={{ backgroundColor: 'white', color: 'black', border: 'gray', width: '100%', textAlign: 'center' }}>❌</button>
+      <button onClick={handleEditClickInDropdown} style={{ backgroundColor: 'white', color: 'black', border: 'gray', width: '100%', textAlign: 'center', whiteSpace: 'nowrap' }}>수정</button>
+    </div>
+  )}
+</div>
+
+
         </div>
           <p> {post.Writer} | {new Date(post.time).toLocaleString()}</p>
           <p> {post.PostText}</p>
@@ -257,13 +259,16 @@ const PostDetail = () => {
           
           <ul>
             {comments.map((comment) => (
-              <li key={comment.id}>
+              <li key={comment.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div>
                 <p>{comment.text}</p>
-                <p>Time: {new Date(comment.time).toLocaleString()}</p>
-                {comment.createrId === createrId && (
-                  <button onClick={() => handleDeleteComment(comment.id)}>삭제</button>
-                )}
-              </li>
+                <p>{new Date(comment.time).toLocaleString()}</p>
+              </div>
+              {comment.createrId === createrId && (
+                <button onClick={() => handleDeleteComment(comment.id)} style={{ backgroundColor: 'white', border: 'white' }}>❌</button>
+              )}
+            </li>
+            
             ))}
           </ul>
           <form onSubmit={handleCommentSubmit} style={{ textAlign: 'center', marginTop: '10px', margin: 'auto', width: '50%' }}>

@@ -3,6 +3,8 @@ import {initializeApp} from 'firebase/app';
 import { getAuth, GoogleAuthProvider, signInWithPopup, RecaptchaVerifier } from "firebase/auth";
 import {getFirestore} from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+import { getDatabase } from "firebase/database";
+
 
 const firebaseConfig = {
     apiKey: "AIzaSyAeKFb4VzVOfA1Zpj-pGJKJAixQWStOGzk",
@@ -17,5 +19,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const authService = getAuth();
 export const dbService = getFirestore();
-export const storageService = getStorage(); 
+export const storageService = getStorage(app);
+export const database = getDatabase();
 authService.languageCode = 'it';

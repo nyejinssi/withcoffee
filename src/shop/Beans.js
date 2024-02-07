@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { dbService } from '../fbase';
-import { Link, useLocation } from 'react-router-dom';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { Link } from 'react-router-dom';
+import { collection, getDocs, doc } from 'firebase/firestore';
+import BeansLoadList from './BeansLoadList';
+import { getDatabase, ref, get, limitToFirst, onValue, orderByKey } from "firebase/database";
 import shop from './shop.css';
 
 const Beans = () => {
-
   const [products, setProducts] = useState([]); // 전체 상품 리스트
   const [filteredProducts, setFilteredProducts] = useState([]); // 필터링된 상품 리스트
   const [brandFilter, setBrandFilter] = useState(''); // 브랜드 필터
@@ -17,9 +18,8 @@ const Beans = () => {
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
   const [itemsPerPage, setItemsPerPage] = useState(20); //페이지당 상품 갯수
 
-  const [isTextBlack, setIsTextBlack] = useState(true); //텍스트 색상 변경
-
-  const brands = ['스타벅스', '맥심', '폴바셋', '테라로사', '카누', '일리', '블루보틀', '라바짜'];
+  // const brands = ['스타벅스', '맥심', '폴바셋', '테라로사', '카누', '일리', '블루보틀', '라바짜'];
+  const brands=['스타벅스', '맥심', '카누', '폴바셋']
   const priceRanges = [
     { value: '0', label: '~1만 원' },
     { value: '1', label: '1만 원 ~ 2만 5천 원' },
@@ -27,25 +27,27 @@ const Beans = () => {
     { value: '3', label: '5만 원 이상' },
   ];
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const productsCollection = collection(dbService, 'Beans');
-        const querySnapshot = await getDocs(productsCollection);
-
-        const fetchedProducts = querySnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-
-        setProducts(fetchedProducts);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
+  const db = getDatabase();
+  const BeansRef = ref(db, 'Beans');
+ 
+  get(BeansRef).then((snapshot) => {
+    if (snapshot.exists()) {
+      const products = [];
+      snapshot.forEach((childSnapshot) => {
+        const productId = childSnapshot.key;
+        const productData = childSnapshot.val();
+        products.push({
+          id: productId,
+          ...productData,
+        });
+      });
+      setProducts(products);
+    } else {
+      console.log("No data available");
+    }
+  }).catch((error) => {
+    console.error("Error fetching data:", error);
+  });
 
   useEffect(() => {
     const filtered = products.filter(product => {
@@ -55,7 +57,6 @@ const Beans = () => {
         (typeFilter === '' || product.type === parseInt(typeFilter)) &&
         (priceFilter === '' || checkPriceRange(product.price, priceFilter)) &&
         (rateFilter === '' || checkRating(product.rate, rateFilter))
-        
       );
     });
 
@@ -84,20 +85,6 @@ const Beans = () => {
           sortedProducts.sort((a, b) => b.purchaseCnt - a.purchaseCnt);
           break;
       }
-
-      // 브랜드 필터
-  const handleBrandFilter = (value) => {
-    // 이미 선택된 브랜드라면 해제, 아니면 추가
-    setBrandFilter(prevFilter => prevFilter === value ? '' : value);
-  };
-
-  // 가격대 필터
-  const handlePriceFilter = (value) => {
-    // 이미 선택된 가격대라면 해제, 아니면 추가
-    setPriceFilter(prevFilter => prevFilter === value ? '' : value);
-  };
-
-
       return sortedProducts;
     });
   };
@@ -112,18 +99,34 @@ const Beans = () => {
     return filteredProducts.slice(startIndex, endIndex);
   };
 
-  const handleItemsPerPageChange = (e) => {
-    setItemsPerPage(parseInt(e.target.value, 10));
-    setCurrentPage(1);
-  };
-
   const generatePageNumbers = () => {
+    const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
     const pageNumbers = [];
-    for (let i = 1; i <= Math.ceil(filteredProducts.length / itemsPerPage); i++) {
+  
+    let startPage = Math.max(currentPage - 4, 1);
+    let endPage = Math.min(currentPage + 5, totalPages);
+  
+    if (totalPages <= 10) {
+      startPage = 1;
+      endPage = totalPages;
+    } else {
+      if (currentPage <= 5) {
+        startPage = 1;
+        endPage = 10;
+      } else if (currentPage + 4 >= totalPages) {
+        startPage = totalPages - 9;
+        endPage = totalPages;
+      }
+    }
+  
+    for (let i = startPage; i <= endPage; i++) {
       pageNumbers.push(i);
     }
+  
     return pageNumbers;
   };
+  
+
 
   const checkPriceRange = (price, range) => {
     switch (range) {
@@ -143,38 +146,6 @@ const Beans = () => {
   const checkRating = (rate, minRating) => { //별점 *점 이상을 구분하기 위한 함수
     return rate >= minRating;
   };
-
-  const formatPrice = (price) => { //가격 형식
-    return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(price);
-  };
-
-  const getTypeString = (type) => { //타입
-    switch (type) {
-      case 0:
-        return '로스팅 홀빈';
-      case 1:
-        return '분쇄';
-      case 2:
-        return '생두';
-      default:
-        return '';
-    }
-  };
-
-  const paginate = (array, currentPage, itemsPerPage) => { //페이지를 만드는 함수
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    return array.slice(startIndex, endIndex);
-  };
-
-  const changePage = (pageNumber) => { //페이지 변경을 처리
-    setCurrentPage(pageNumber);
-  };
-
-// 카페인 유무 출력
-const getCaffeineInfo = (caffeineValue) => {
-  return caffeineValue === 1 ? '카페인' : '디카페인';
-};
 
 
 // 카페인 필터
@@ -210,198 +181,238 @@ const handleSortOrder = (value) => {
 
 
   return (
-    // <div>검색 결과 출력</div>
     <div className="shop-container">
       <nav className="shop-nav">
-        <li style={{color:'white', backgroundColor:'black'}}>원두</li>
+        <li><Link to="/shop/Beans">원두</Link></li>
         <li><Link to="/shop/Tools">도구</Link></li>
       </nav>
 
       <div className="filter-container">
-        <div className="filter-group">
-          <p>타입</p>
-          <label>
+      <table className="filter-table">
+        <tbody>
+          <tr>
+          <th>타입</th>
+            <td  style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+              {/* <div className="filter-group"> */}
             <input
-              type="checkbox"
+              type="checkbox" 
+              id="wholeBean"
               value="0"
               checked={typeFilter === '0'}
               onChange={() => handleTypeFilter('0')}
             />
-            로스팅 홀빈
-          </label>
-        <label>
+             <label for="wholeBean">로스팅 홀빈</label>
+          </td>
+
+          <td>
           <input
-            type="checkbox"
+            type="checkbox" 
+            id="grindedBean"
             value="1"
             checked={typeFilter === '1'}
             onChange={() => handleTypeFilter('1')}
           />
-          분쇄
-        </label>
-        <label>
+          <label for="grindedBean">분쇄</label>
+          </td>
+
+          <td>
           <input
-            type="checkbox"
+            type="checkbox" 
+            id="rawBean"
             value="2"
             checked={typeFilter === '2'}
             onChange={() => handleTypeFilter('2')}
           />
+          <label for="rawBean">
           생두
-        </label>
-      </div>
+          </label>
+          </td>
+        </tr>
 
-      <div className="filter-group">
-        <p>브랜드</p>
-        {brands.map(brand => (
-          <label key={brand}>
+          <tr>
+          <th>카페인 유무</th>
+            <td>
+          <input
+            type="checkbox" 
+            value="1"
+            id="caffeine"
+            checked={caffeineFilter === '1'}
+            onChange={() => handleCaffeineFilter('1')}
+          />
+          <label for="caffeine">
+          카페인
+        </label>
+        </td>
+
+        <td>
+          <input
+            type="checkbox" 
+            id="decaffeine"
+            value="0"
+            checked={caffeineFilter === '0'}
+            onChange={() => handleCaffeineFilter('0')}
+          />
+          <label for="decaffeine">
+          디카페인
+        </label>
+        </td>
+      </tr>
+
+      <tr>
+      <th>브랜드</th>
+      {brands.map((brand, index) => (
+        <td key={index}>
+          <label>
             <input
-              type="checkbox"
+              type="checkbox" 
               value={brand}
               checked={brandFilter.includes(brand)}
               onChange={() => handleBrandFilter(brand)}
             />
             {brand}
           </label>
-        ))}
-      </div>
-
-      <div className="filter-group">
-        <p>카페인 유무</p>
-        <label>
-          <input
-            type="checkbox"
-            value="1"
-            checked={caffeineFilter === '1'}
-            onChange={() => handleCaffeineFilter('1')}
-          />
-          카페인
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            value="0"
-            checked={caffeineFilter === '0'}
-            onChange={() => handleCaffeineFilter('0')}
-          />
-          디카페인
-        </label>
-      </div>
-
-    <div className="filter-group">
-      <p>가격대</p>
-      {priceRanges.map((range, index) => (
-        <label key={index}>
-          <input
-            type="checkbox"
-            value={index}
-            checked={priceFilter.includes(index.toString())}
-            onChange={() => handlePriceFilter(index.toString())}
-          />
-          {range.label}
-        </label>
+        </td>
       ))}
-    </div>
+    </tr>
 
-      {/* 별점 필터 */}
-      <div className="filter-group">
-        <p>별점</p>
-        <label>
+      <tr>
+            <th>별점</th>
+            <td>
+              <label>
           <input
-            type="checkbox"
+            type="checkbox" 
             value="1"
             checked={rateFilter === '1'}
             onChange={() => handleRateFilter('1')}
           />
           1점 이상
         </label>
+        </td>
+        <td>
         <label>
           <input
-            type="checkbox"
+            type="checkbox" 
             value="2"
             checked={rateFilter === '2'}
             onChange={() => handleRateFilter('2')}
           />
           2점 이상
         </label>
+        </td>
+
+        <td>
         <label>
           <input
-            type="checkbox"
+            type="checkbox" 
             value="3"
             checked={rateFilter === '3'}
             onChange={() => handleRateFilter('3')}
           />
           3점 이상
         </label>
+        </td>
+
+        <td>          
         <label>
           <input
-            type="checkbox"
+            type="checkbox" 
             value="4"
             checked={rateFilter === '4'}
             onChange={() => handleRateFilter('4')}
           />
           4점 이상
         </label>
+            </td>
+        </tr>
+
+            <tr>
+            <th>가격대</th>
+              {priceRanges.map((range, index) => (
+                <td>
+                <label key={index}>
+                  <input
+                    type="checkbox" 
+                    value={index}
+                    checked={priceFilter.includes(index.toString())}
+                    onChange={() => handlePriceFilter(index.toString())}
+                  />
+                  {range.label}
+                </label>
+                </td>
+                ))}
+          </tr>
+        </tbody>
+      </table>
       </div>
-      </div>
-    <div className="sort-group">
-      <p>정렬 기준</p>
-      <label>
-        <input
-          type="checkbox"
-          value="popularity"
-          checked={sortOrder === 'popularity'}
-          onChange={() => handleSortOrder('popularity')}
-        />
-        인기순
-      </label>
-      <label>
-        <input
-          type="checkbox"
-          value="priceHigh"
-          checked={sortOrder === 'priceHigh'}
-          onChange={() => handleSortOrder('priceHigh')}
-        />
-        가격 높은 순
-      </label>
-      <label>
-        <input
-          type="checkbox"
-          value="priceLow"
-          checked={sortOrder === 'priceLow'}
-          onChange={() => handleSortOrder('priceLow')}
-        />
-        가격 낮은 순
-      </label>
-      <label>
-        <input
-          type="checkbox"
-          value="ratingHigh"
-          checked={sortOrder === 'ratingHigh'}
-          onChange={() => handleSortOrder('ratingHigh')}
-        />
-        인터넷 별점 높은 순
-      </label>
-    </div>
+
+      <div className="sort-group">
+  <table className='sort-table'>
+    <tr>
+      <td style={{ backgroundColor: sortOrder === 'popularity' || sortOrder === '' ? 'black' : 'white' }}>
+        <label style={{ color: sortOrder === 'popularity' || sortOrder === '' ? 'white' : 'black' }}>
+          <input
+            type="checkbox"
+            value="popularity"
+            checked={sortOrder === 'popularity' || sortOrder === ''}
+            onChange={() => handleSortOrder(sortOrder === 'popularity' ? '' : 'popularity')}
+          />
+          인기순
+        </label>
+      </td>
+
+      <td style={{ backgroundColor: sortOrder === 'priceHigh' ? 'black' : 'white' }}>
+        <label style={{ color: sortOrder === 'priceHigh' ? 'white' : 'black' }}>
+          <input
+            type="checkbox"
+            value="priceHigh"
+            checked={sortOrder === 'priceHigh'}
+            onChange={() => handleSortOrder(sortOrder === 'priceHigh' ? '' : 'priceHigh')}
+          />
+          가격 높은 순
+        </label>
+      </td>
+
+      <td style={{ backgroundColor: sortOrder === 'priceLow' ? 'black' : 'white' }}>
+        <label style={{ color: sortOrder === 'priceLow' ? 'white' : 'black' }}>
+          <input
+            type="checkbox"
+            value="priceLow"
+            checked={sortOrder === 'priceLow'}
+            onChange={() => handleSortOrder(sortOrder === 'priceLow' ? '' : 'priceLow')}
+          />
+          가격 낮은 순
+        </label>
+      </td>
+
+      <td style={{ backgroundColor: sortOrder === 'ratingHigh' ? 'black' : 'white' }}>
+        <label style={{ color: sortOrder === 'ratingHigh' ? 'white' : 'black' }}>
+          <input
+            type="checkbox"
+            value="ratingHigh"
+            checked={sortOrder === 'ratingHigh'}
+            onChange={() => handleSortOrder(sortOrder === 'ratingHigh' ? '' : 'ratingHigh')}
+          />
+          인터넷 별점 높은 순
+        </label>
+      </td>
+    </tr>
+  </table>
+</div>
+
+
 
        {/* 상품 목록 렌더링 */}
-      <ul className="products-list">
-        {getCurrentProducts().map(product => (
-          <li className="products-list-item" key={product.id}>
-            <h3><Link to={`/shop/Detail/${product.id}`}>{product.name}</Link></h3>
-            <p className="products-metadata"> 카테고리: {getTypeString(product.type)} | 브랜드: {product.brand} | 카페인 여부: {getCaffeineInfo(product.caffeine)} | 가격: {formatPrice(product.price)} | 인터넷 별점: {product.rate}</p>
-            <Link to={`/shop/Detail/${product.id}`}>{product.image && <img src={product.image} alt="Product" style={{ width: '100px', height: '100px' }} />}</Link>
-          </li>
-        ))}
-      </ul>
-            {/* 페이지 넘기기 버튼 */}
-      <div>
+       <BeansLoadList products={getCurrentProducts()}/>
+       
+       <div className='pagination-button'>
         {generatePageNumbers().map(pageNumber => (
           <button className='product-list-next-button' key={pageNumber} onClick={() => setCurrentPage(pageNumber)} disabled={currentPage === pageNumber}>
             {pageNumber}
           </button>
         ))}
       </div>
+      </div>
 
-  </div>
   );
 };
 
